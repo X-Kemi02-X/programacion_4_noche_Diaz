@@ -1,27 +1,47 @@
-// MainActivity.kt
 package com.ute.compose
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.MaterialTheme
-import com.ute.compose.screens.*
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.ute.compose.ui.theme.ComposeTheme
 
 class MainActivityHelloWorld : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
-            MaterialTheme {
-                // ◀ CAMBIA AQUÍ para probar cada sección:
-                // S01_SaludoScreen()
-                // S02_TextScreen()
-                 S03_ButtonScreen()
-                // S04_LayoutScreen()
-                // S05_ModifierScreen()
-                // S06_EstadoScreen()
-                // S07_StateHoistingScreen()
-                // S08_BienvenidaScreen()
+            ComposeTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    Greeting(
+                        name = "Android",
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
             }
         }
+    }
+}
+
+@Composable
+fun Greeting(name: String, modifier: Modifier = Modifier) {
+    Text(
+        text = "Hello $name!",
+        modifier = modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    ComposeTheme {
+        Greeting("Android")
     }
 }

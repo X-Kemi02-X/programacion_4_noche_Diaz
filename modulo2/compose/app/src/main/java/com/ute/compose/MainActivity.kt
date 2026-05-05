@@ -1,47 +1,38 @@
+// MainActivityHelloWorld.kt
 package com.ute.compose
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.ute.compose.ui.theme.ComposeTheme
+import androidx.compose.material3.MaterialTheme
+import com.ute.compose.screens.*
+import com.ute.compose.material.*
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            ComposeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+            MaterialTheme {
+                // ◀ CAMBIA AQUÍ para probar cada sección:
+                // S01_SaludoScreen()
+                // S02_TextScreen()
+                // S03_ButtonScreen()
+                // S04_LayoutScreen()
+                // S05_ModifierScreen()
+                // S06_EstadoScreen()
+                //S07_StateHoistingScreen()
+                // S08_BienvenidaScreen()
+
+                // Componentes Material 3: TextField, Card, LazyColumn, Scaffold y diálogos
+                // ◀ CAMBIA AQUÍ para probar cada paso:
+                // Paso01_TextFieldScreen()
+                // Paso02_CardScreen()
+                 Paso03_LazyColumnScreen()
+                // Paso04_ScaffoldScreen()
+                // Paso05_NavBarScreen()
+                // Paso06_DialogosScreen()   // ← paso activo
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ComposeTheme {
-        Greeting("Android")
     }
 }
