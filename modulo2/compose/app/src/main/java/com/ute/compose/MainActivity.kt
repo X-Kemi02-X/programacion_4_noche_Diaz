@@ -7,6 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import com.ute.compose.screens.*
 import com.ute.compose.material.*
+import com.ute.compose.ui.viewmodel.*
+import com.ute.compose.viewmodel.ProductosViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -28,10 +30,13 @@ class MainActivity : ComponentActivity() {
                 // ◀ CAMBIA AQUÍ para probar cada paso:
                 // Paso01_TextFieldScreen()
                 // Paso02_CardScreen()
-                 Paso03_LazyColumnScreen()
+                // Paso03_LazyColumnScreen()
                 // Paso04_ScaffoldScreen()
                 // Paso05_NavBarScreen()
                 // Paso06_DialogosScreen()   // ← paso activo
+
+                // Paso01_ViewModelScreen()
+                Paso02_UiStateScreen()
             }
         }
     }
