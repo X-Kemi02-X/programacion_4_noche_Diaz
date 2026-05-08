@@ -29,6 +29,9 @@ class MainActivity : ComponentActivity() {
                 // Componentes Material 3: TextField, Card, LazyColumn, Scaffold y diálogos
                 // ◀ CAMBIA AQUÍ para probar cada paso:
                 // Paso01_TextFieldScreen()
+                // Paso01_SumaScreen()
+                // Paso01AreaTriangulo()
+                Paso01CompraProducto()
                 // Paso02_CardScreen()
                 // Paso03_LazyColumnScreen()
                 // Paso04_ScaffoldScreen()
@@ -36,7 +39,7 @@ class MainActivity : ComponentActivity() {
                 // Paso06_DialogosScreen()   // ← paso activo
 
                 // Paso01_ViewModelScreen()
-                Paso02_UiStateScreen()
+                // Paso02_UiStateScreen()
             }
         }
     }
