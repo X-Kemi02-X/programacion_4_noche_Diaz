@@ -32,7 +32,9 @@ void main() {
     print('Promedio de minutos por cliente: 0.0');
   }
 }
-*/
+
+ */
+
 
 /*
 void main() {
@@ -67,6 +69,7 @@ void main() {
     print('Promedio de muebles por trabajador: 0.0');
   }
 }
+
 
  */
 
@@ -147,9 +150,9 @@ void main() {
     print('Promedio de pacientes por doctor: 0.0');
   }
 }
-*/
 
-/*
+ */
+
 void main() {
   int totalPasajeros = 0;
   int totalMinutosRetraso = 0;
@@ -207,7 +210,7 @@ void main() {
     print('Promedio general de retraso por vuelo: 0.0');
   }
 }
-*/
+
 
 
 /*
@@ -236,12 +239,11 @@ void main() {
   print('Promedio de ventas diario: ${promedioVentas.toStringAsFixed(2)}');
   print('Clasificación de rendimiento: $rendimiento');
 }
-m,
  */
 
 
 
-
+/*
 void main() {
   double totalKilometros = 0;
   double totalCombustible = 0;
@@ -272,3 +274,5 @@ void main() {
   print('Promedio de kilómetros por viaje: ${promedioKilometros.toStringAsFixed(2)} km/viaje');
   print('Clasificación del turno: $tipoRuta');
 }
+
+ */
