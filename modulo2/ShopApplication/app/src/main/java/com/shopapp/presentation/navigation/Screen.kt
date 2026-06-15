@@ -24,12 +24,14 @@ sealed class Screen(val route: String) {
     }
     data object Profile : Screen("profile")
 
+
     // Admin
     data object AdminDashboard  : Screen("admin")
     data object AdminCategories : Screen("admin/categories")
     data object AdminProducts   : Screen("admin/products")
     data object AdminOrders     : Screen("admin/orders")
     data object AdminUsers      : Screen("admin/users")
+    data object SendNotification : Screen("send-notification")
 
 
 }
