@@ -6,6 +6,9 @@ sealed class Screen(val route: String) {
     data object Login    : Screen("login")
     data object Register : Screen("register")
 
+    data object ForgotPassword       : Screen("forgot-password")
+    data object ResetPasswordConfirm : Screen("reset-password-confirm")
+
     // Public
     data object Home     : Screen("home")
     data object Catalog  : Screen("catalog")
@@ -21,10 +24,14 @@ sealed class Screen(val route: String) {
     }
     data object Profile : Screen("profile")
 
+
     // Admin
     data object AdminDashboard  : Screen("admin")
     data object AdminCategories : Screen("admin/categories")
     data object AdminProducts   : Screen("admin/products")
     data object AdminOrders     : Screen("admin/orders")
     data object AdminUsers      : Screen("admin/users")
+    data object SendNotification : Screen("send-notification")
+
+
 }
