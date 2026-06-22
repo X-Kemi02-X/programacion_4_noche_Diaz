@@ -4,6 +4,9 @@ import 'widgets/catalogo_basicos.dart';
 import 'widgets/etiqueta.dart';
 import 'widgets/servicio_estado.dart';
 import 'widgets/contador_limitado.dart';
+import 'widgets/reloj.dart';
+import 'widgets/pantalla_contexto.dart';
+import 'widgets/indicador.dart';
 
 // ┌──────────────────────────────────────────────────────────────────┐
 // │  Cambia este número y guarda (Ctrl+S) para navegar entre pasos. │
@@ -16,10 +19,17 @@ import 'widgets/contador_limitado.dart';
 // │  7  Paso 5   BuildContext                                        │
 // │  8  Paso 6   Composición de widgets                             │
 // └──────────────────────────────────────────────────────────────────┘
-const int paso = 5;
+const int paso = 8;
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,
+  theme: ThemeData(
+    colorScheme:  ColorScheme.fromSeed(
+      seedColor:  const Color.fromARGB(255, 236, 0, 51),          // ← cambia aquí
+      brightness: Brightness.dark,     // ← Brightness.dark para modo oscuro
+    ),
+    useMaterial3: true,
+  ),
   home: switch (paso) {
     1 => const Scaffold(body: Center(child: Saludo())),
     2 => const CatalogoBasicos(),
@@ -51,19 +61,44 @@ void main() => runApp(MaterialApp(
             ContadorLimitado(
               etiqueta: 'Intentos de login',
               limite:   3,
-              color:    Colors.red,
+              color:    const Color.fromARGB(255, 54, 216, 244),
               onLimite: () => debugPrint('¡Cuenta bloqueada!'),
             ),
             const SizedBox(height: 40),
             ContadorLimitado(
               etiqueta: 'Conexiones activas',
               limite:   10,
-              color:    Colors.indigo,
+              color:    const Color.fromARGB(255, 187, 255, 0),
             ),
           ],
         ),
       ),
     ),
+    6 => Scaffold(                              // Paso 4
+      appBar: AppBar(title: const Text('Cronómetro')),
+      body: const Center(child: Reloj()),
+    ),
+    7 => const PantallaContexto(),
+    8 => Scaffold(                             // Paso 6
+      body: Center(
+        child: Wrap(
+          spacing:    32,
+          runSpacing: 24,
+          alignment:  WrapAlignment.center,
+          children: const [
+            Indicador(label: 'Servidores activos', valor: '8',
+                      color: Colors.green, icono: Icons.dns),
+            Indicador(label: 'Alertas críticas',   valor: '2',
+                      color: Colors.red,   icono: Icons.warning_amber,
+                      subtitulo: 'Requieren atención'),
+            Indicador(label: 'Tráfico',            valor: '4.2 GB',
+                      color: Colors.indigo),
+            Indicador(label: 'Uptime',             valor: '99.8%',
+                      color: Colors.teal, subtitulo: 'Últimos 30 días'),
+          ],
+        ),
+      ),
+    ), // Paso 5 — ya tiene su propio Scaffold
     _ => Scaffold(body: Center(child: Text('Paso $paso: crea el widget primero'))),
   },
 ));

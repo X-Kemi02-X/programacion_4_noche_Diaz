@@ -40,12 +40,12 @@ class _ContadorLimitadoState extends State<ContadorLimitado> {
         Text(widget.etiqueta,                               // ← widget.etiqueta
             style: TextStyle(color: widget.color, fontWeight: FontWeight.w600)),
 
-        const SizedBox(height: 4),
+        const SizedBox(height: 6),
 
         // Barra de progreso que refleja el estado
         LinearProgressIndicator(
           value:           progreso,
-          color:           enLimite ? Colors.red : widget.color,   // ← widget.color
+          color:           enLimite ? const Color.fromARGB(255, 0, 38, 255) : widget.color,   // ← widget.color
           backgroundColor: widget.color.withOpacity(0.15),
         ),
 
@@ -56,7 +56,7 @@ class _ContadorLimitadoState extends State<ContadorLimitado> {
           style: TextStyle(
             fontSize:   28,
             fontWeight: FontWeight.bold,
-            color:      enLimite ? Colors.red : widget.color,
+            color:      enLimite ? const Color.fromARGB(255, 107, 0, 102) : widget.color,
           ),
         ),
 
