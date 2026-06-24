@@ -19,9 +19,17 @@ import com.shopapp.presentation.viewmodel.ProfileViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
+<<<<<<< Updated upstream
     onEditProfile: () -> Unit       = {},
     onLogout:      () -> Unit       = {},
     viewModel:     ProfileViewModel = hiltViewModel(),
+=======
+    onEditProfile:      () -> Unit = {},
+    onLogout:           () -> Unit = {},
+    onSendNotification: () -> Unit = {},
+    isStaff:            Boolean = false,
+    viewModel:          ProfileViewModel = hiltViewModel(),
+>>>>>>> Stashed changes
 ) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -93,7 +101,7 @@ fun ProfileScreen(
 
                     Spacer(Modifier.height(4.dp))
 
-                    if (profile?.isStaff == true) {
+                    if (isStaff) {
                         SuggestionChip(onClick = {}, label = { Text("Staff") })
                     }
 
@@ -101,6 +109,37 @@ fun ProfileScreen(
                     HorizontalDivider()
                     Spacer(Modifier.height(16.dp))
 
+<<<<<<< Updated upstream
+=======
+                    if (isStaff) {
+                        ListItem(
+                            headlineContent = {
+                                Text("Enviar notificación", fontWeight = FontWeight.Medium)
+                            },
+                            supportingContent = {
+                                Text("Envía un correo a uno o todos los usuarios")
+                            },
+                            leadingContent = {
+                                Icon(
+                                    imageVector = Icons.Default.Send,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                )
+                            },
+                            trailingContent = {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                    contentDescription = null,
+                                )
+                            },
+                            modifier = Modifier.clickable(onClick = onSendNotification),
+                        )
+
+                        HorizontalDivider()
+                        Spacer(Modifier.height(16.dp))
+                    }
+
+>>>>>>> Stashed changes
                     OutlinedButton(
                         onClick  = onEditProfile,
                         modifier = Modifier.fillMaxWidth(),

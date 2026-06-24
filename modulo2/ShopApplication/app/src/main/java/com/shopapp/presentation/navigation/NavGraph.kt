@@ -204,6 +204,13 @@ fun NavGraph(
                                 popUpTo(0) { inclusive = true }
                             }
                         },
+<<<<<<< Updated upstream
+=======
+                        onSendNotification = {
+                            navController.navigate(Screen.SendNotification.route)
+                        },
+                        isStaff = isStaff,
+>>>>>>> Stashed changes
                     )
                 }
             }
