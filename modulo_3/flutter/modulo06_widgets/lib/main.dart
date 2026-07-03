@@ -105,6 +105,7 @@ void main() => runApp(MaterialApp(
 
 class Saludo extends StatelessWidget {
   const Saludo({super.key});
+  @override
   Widget build(BuildContext context) {
     // describe cómo se ve
     return const SelectableText (
