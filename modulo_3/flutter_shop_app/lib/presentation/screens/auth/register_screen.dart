@@ -54,7 +54,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
     ref.listen<AuthState>(authProvider, (_, next) {
       if (next.isAuthenticated) {
-        context.go(next.isStaff ? '/admin' : '/');
+        context.go('/');
       }
     });
 

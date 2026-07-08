@@ -195,7 +195,7 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
                     final p = state.products[i];
                     return ProductCard(
                       product: p,
-                      onTap: () => context.push('/catalog/${p.id}'),
+                      onTap: () => context.push('/product/${p.id}'),
                     );
                   },
                   childCount: state.products.length,

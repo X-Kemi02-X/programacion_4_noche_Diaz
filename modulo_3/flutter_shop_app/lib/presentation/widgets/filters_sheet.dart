@@ -180,12 +180,12 @@ class _FiltersSheetState extends State<_FiltersSheet> {
                 // ── Sort by ───────────────────────────────
                 const _SectionTitle('Sort by'),
                 const SizedBox(height: 8),
-                ..._orderOptions.map((o) => RadioListTile<String>(
+                ..._orderOptions.map((o) => ListTile(
                       title: Text(o.$1),
-                      value: o.$2,
-                      groupValue: _ordering,
-                      onChanged: (v) => setState(() => _ordering = v),
-                      activeColor: AppColors.accent,
+                      trailing: _ordering == o.$2
+                          ? const Icon(Icons.radio_button_checked, color: AppColors.accent)
+                          : const Icon(Icons.radio_button_unchecked, color: AppColors.textSecondary),
+                      onTap: () => setState(() => _ordering = o.$2),
                       contentPadding: EdgeInsets.zero,
                     )),
               ],
