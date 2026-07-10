@@ -7,6 +7,9 @@ import '../../domain/model/auth_state.dart';
 import '../providers/auth_provider.dart';
 import '../screens/auth/login_screen.dart';
 import '../screens/auth/register_screen.dart';
+import '../screens/auth/forgot_password_screen.dart';
+import '../screens/auth/reset_password_confirm_screen.dart';
+import '../screens/admin/send_notification_screen.dart';
 import '../screens/catalog/catalog_screen.dart';
 import '../screens/catalog/productdetailscreen.dart' show ProductDetailScreen;
 import '../screens/catalog/home_screen.dart';
@@ -33,10 +36,15 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       if (auth.isChecking)        return null;
 
-      final isAuthRoute = location == '/login' || location == '/register';
+      final isAuthRoute = location == '/login'
+          || location == '/register'
+          || location == '/forgot-password'
+          || location == '/reset-password-confirm';
 
       if (!auth.isAuthenticated && !isAuthRoute) return '/login';
-      if ( auth.isAuthenticated &&  isAuthRoute) return '/';
+      if ( auth.isAuthenticated &&  isAuthRoute) return auth.isStaff ? '/admin' : '/';
+      if ( auth.isAuthenticated && !auth.isStaff && location.startsWith('/admin')) return '/';
+      if ( auth.isAuthenticated && !auth.isStaff && location == '/send-notification') return '/';
 
       return null;
     },
@@ -44,6 +52,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       // ── Auth ──────────────────────────────────────────────
       GoRoute(path: '/login',    builder: (_, __) => const LoginScreen()),
       GoRoute(path: '/register', builder: (_, __) => const RegisterScreen()),
+      GoRoute(path: '/forgot-password',        builder: (_, __) => const ForgotPasswordScreen()),
+      GoRoute(path: '/reset-password-confirm', builder: (_, __) => const ResetPasswordConfirmScreen()),
+
+      // ── Staff ─────────────────────────────────────────────
+      GoRoute(path: '/send-notification', builder: (_, __) => const SendNotificationScreen()),
 
       // ── Detalle de producto (fuera del shell → sin BottomNavBar) ──
       GoRoute(
