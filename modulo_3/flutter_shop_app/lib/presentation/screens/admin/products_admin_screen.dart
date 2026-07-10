@@ -1,6 +1,5 @@
 // lib/presentation/screens/admin/products_admin_screen.dart
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../theme/app_colors.dart';
@@ -11,16 +10,20 @@ import '../../../domain/model/product.dart';
 import '../../providers/products_admin_provider.dart';
 import '../../widgets/product_form.dart';
 import '../../widgets/restock_dialog.dart';
+import '../../providers/image_upload_provider.dart';
+import '../../widgets/product_image.dart';
 
 class ProductsAdminScreen extends ConsumerStatefulWidget {
   const ProductsAdminScreen({super.key});
 
   @override
-  ConsumerState<ProductsAdminScreen> createState() => _ProductsAdminScreenState();
+  ConsumerState<ProductsAdminScreen> createState() =>
+      _ProductsAdminScreenState();
 }
 
 class _ProductsAdminScreenState extends ConsumerState<ProductsAdminScreen> {
   List<Category> _categories = [];
+  int? _uploadingProductId;
 
   @override
   void initState() {
@@ -32,15 +35,35 @@ class _ProductsAdminScreenState extends ConsumerState<ProductsAdminScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state    = ref.watch(productsAdminProvider);
+    final state = ref.watch(productsAdminProvider);
     final filtered = state.filtered;
+    final uploadState = ref.watch(imageUploadProvider);
+
+    ref.listen<ImageUploadState>(imageUploadProvider, (_, next) {
+      if (next is ImageUploadSuccess) {
+        setState(() => _uploadingProductId = null);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Imagen del producto actualizada.')),
+        );
+        ref.read(productsAdminProvider.notifier).load(); // recarga lista
+        ref.read(imageUploadProvider.notifier).reset();
+      } else if (next is ImageUploadError) {
+        setState(() => _uploadingProductId = null);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(next.message), backgroundColor: AppColors.error),
+        );
+        ref.read(imageUploadProvider.notifier).reset();
+      }
+    });
 
     return Column(
       children: [
+        // ── Header ──────────────────────────────────────────
         Container(
-          color:   AppColors.surface,
+          color: AppColors.surface,
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-          child:   Column(
+          child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,25 +73,31 @@ class _ProductsAdminScreenState extends ConsumerState<ProductsAdminScreen> {
                     children: [
                       const Text('Productos',
                           style: TextStyle(
-                            color: AppColors.textPrimary, fontSize: 22, fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
                           )),
                       Text('${state.total} productos',
-                          style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                          style: const TextStyle(
+                              color: AppColors.textSecondary, fontSize: 13)),
                     ],
                   ),
                   Row(
                     children: [
                       IconButton(
-                        onPressed: () => ref.read(productsAdminProvider.notifier).load(),
-                        icon:      const Icon(Icons.refresh_rounded, color: AppColors.textSecondary),
+                        onPressed: () =>
+                            ref.read(productsAdminProvider.notifier).load(),
+                        icon: const Icon(Icons.refresh_rounded,
+                            color: AppColors.textSecondary),
                       ),
                       ElevatedButton.icon(
-                        onPressed: () => showProductForm(context, ref, categories: _categories),
-                        icon:      const Icon(Icons.add, size: 18),
-                        label:     const Text('Nuevo'),
-                        style:     ElevatedButton.styleFrom(
+                        onPressed: () => showProductForm(context, ref,
+                            categories: _categories),
+                        icon: const Icon(Icons.add, size: 18),
+                        label: const Text('Nuevo'),
+                        style: ElevatedButton.styleFrom(
                           minimumSize: const Size(0, 40),
-                          padding:     const EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                         ),
                       ),
                     ],
@@ -77,30 +106,36 @@ class _ProductsAdminScreenState extends ConsumerState<ProductsAdminScreen> {
               ),
               const SizedBox(height: 12),
 
+              // Búsqueda
               TextField(
-                onChanged:  ref.read(productsAdminProvider.notifier).setSearch,
+                onChanged: ref.read(productsAdminProvider.notifier).setSearch,
                 decoration: const InputDecoration(
-                  hintText:   'Buscar producto...',
-                  prefixIcon: Icon(Icons.search_rounded, color: AppColors.textSecondary),
+                  hintText: 'Buscar producto...',
+                  prefixIcon: Icon(Icons.search_rounded,
+                      color: AppColors.textSecondary),
                   contentPadding: EdgeInsets.symmetric(vertical: 10),
                 ),
                 style: const TextStyle(color: AppColors.textPrimary),
               ),
               const SizedBox(height: 10),
 
+              // Chips de filtro
               SizedBox(
                 height: 34,
-                child:  ListView(
+                child: ListView(
                   scrollDirection: Axis.horizontal,
-                  children: ProductStockFilter.values.map((f) => Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child:   ChoiceChip(
-                      label:     Text(f.label),
-                      selected:  state.stockFilter == f,
-                      onSelected:(_) =>
-                          ref.read(productsAdminProvider.notifier).setStockFilter(f),
-                    ),
-                  )).toList(),
+                  children: ProductStockFilter.values
+                      .map((f) => Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: ChoiceChip(
+                              label: Text(f.label),
+                              selected: state.stockFilter == f,
+                              onSelected: (_) => ref
+                                  .read(productsAdminProvider.notifier)
+                                  .setStockFilter(f),
+                            ),
+                          ))
+                      .toList(),
                 ),
               ),
               const SizedBox(height: 12),
@@ -108,6 +143,7 @@ class _ProductsAdminScreenState extends ConsumerState<ProductsAdminScreen> {
           ),
         ),
 
+        // ── Lista ─────────────────────────────────────────────
         Expanded(
           child: Builder(builder: (_) {
             if (state.isLoading) {
@@ -120,11 +156,13 @@ class _ProductsAdminScreenState extends ConsumerState<ProductsAdminScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(state.error!, style: const TextStyle(color: AppColors.error)),
+                    Text(state.error!,
+                        style: const TextStyle(color: AppColors.error)),
                     const SizedBox(height: 12),
                     ElevatedButton(
-                      onPressed: () => ref.read(productsAdminProvider.notifier).load(),
-                      child:     const Text('Reintentar'),
+                      onPressed: () =>
+                          ref.read(productsAdminProvider.notifier).load(),
+                      child: const Text('Reintentar'),
                     ),
                   ],
                 ),
@@ -139,7 +177,9 @@ class _ProductsAdminScreenState extends ConsumerState<ProductsAdminScreen> {
                     SizedBox(height: 12),
                     Text('Sin productos',
                         style: TextStyle(
-                          color: AppColors.textPrimary, fontSize: 18, fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         )),
                   ],
                 ),
@@ -147,17 +187,29 @@ class _ProductsAdminScreenState extends ConsumerState<ProductsAdminScreen> {
             }
 
             return ListView.separated(
-              padding:         const EdgeInsets.all(16),
-              itemCount:       filtered.length,
-              separatorBuilder:(_, __) => const SizedBox(height: 10),
+              padding: const EdgeInsets.all(16),
+              itemCount: filtered.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 10),
               itemBuilder: (_, i) => _ProductAdminCard(
-                product:    filtered[i],
-                onToggle:   () => ref.read(productsAdminProvider.notifier)
+                product: filtered[i],
+                isUploadingImage: uploadState is ImageUploadLoading &&
+                    _uploadingProductId == filtered[i].id,
+                onUploadImage: () {
+                  setState(() => _uploadingProductId = filtered[i].id);
+                  ref
+                      .read(imageUploadProvider.notifier)
+                      .pickAndUploadProductImage(filtered[i].id);
+                },
+                onToggle: () => ref
+                    .read(productsAdminProvider.notifier)
                     .toggleActive(filtered[i].id, !filtered[i].isActive),
-                onEdit:     () => showProductForm(
-                  context, ref, initial: filtered[i], categories: _categories,
+                onEdit: () => showProductForm(
+                  context,
+                  ref,
+                  initial: filtered[i],
+                  categories: _categories,
                 ),
-                onRestock:  () async {
+                onRestock: () async {
                   final qty = await showRestockDialog(context, filtered[i]);
                   if (qty != null && context.mounted) {
                     final newStock = await ref
@@ -170,13 +222,14 @@ class _ProductsAdminScreenState extends ConsumerState<ProductsAdminScreen> {
                               ? '✅ Stock actualizado: $newStock unidades'
                               : '❌ Error al actualizar el stock',
                         ),
-                        backgroundColor:
-                            newStock != null ? AppColors.success : AppColors.error,
+                        backgroundColor: newStock != null
+                            ? AppColors.success
+                            : AppColors.error,
                       ));
                     }
                   }
                 },
-                onDelete:   () => _confirmDelete(context, ref, filtered[i]),
+                onDelete: () => _confirmDelete(context, ref, filtered[i]),
               ),
             );
           }),
@@ -190,23 +243,26 @@ class _ProductsAdminScreenState extends ConsumerState<ProductsAdminScreen> {
       context: context,
       builder: (_) => AlertDialog(
         backgroundColor: AppColors.surface,
-        shape:           RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title:  const Text('¿Eliminar producto?',
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('¿Eliminar producto?',
             style: TextStyle(color: AppColors.textPrimary)),
-        content:Text('"${product.name}" se eliminará permanentemente.',
+        content: Text('"${product.name}" se eliminará permanentemente.',
             style: const TextStyle(color: AppColors.textSecondary)),
-        actions:[
+        actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child:     const Text('Cancelar'),
+            child: const Text('Cancelar'),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              ref.read(productsAdminProvider.notifier).deleteProduct(product.id);
+              ref
+                  .read(productsAdminProvider.notifier)
+                  .deleteProduct(product.id);
             },
             child: const Text('Eliminar',
-                style: TextStyle(color: AppColors.error, fontWeight: FontWeight.bold)),
+                style: TextStyle(
+                    color: AppColors.error, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -214,12 +270,16 @@ class _ProductsAdminScreenState extends ConsumerState<ProductsAdminScreen> {
   }
 }
 
+// ── ProductAdminCard ──────────────────────────────────────────
+
 class _ProductAdminCard extends StatelessWidget {
-  final Product      product;
+  final Product product;
   final VoidCallback onToggle;
   final VoidCallback onEdit;
   final VoidCallback onRestock;
   final VoidCallback onDelete;
+  final bool isUploadingImage;
+  final GestureTapCallback? onUploadImage;
 
   const _ProductAdminCard({
     required this.product,
@@ -227,127 +287,176 @@ class _ProductAdminCard extends StatelessWidget {
     required this.onEdit,
     required this.onRestock,
     required this.onDelete,
+    required this.isUploadingImage,
+    this.onUploadImage,
   });
 
   Color _stockColor() {
     if (product.stock == 0) return AppColors.error;
-    if (product.stock < 5)  return AppColors.warning;
+    if (product.stock < 5) return AppColors.warning;
     return AppColors.success;
   }
 
   @override
   Widget build(BuildContext context) => Opacity(
-    opacity: product.isActive ? 1.0 : 0.55,
-    child:   Container(
-      padding:    const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color:        AppColors.surface,
-        borderRadius: BorderRadius.circular(14),
-        border:       Border.all(color: AppColors.border),
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: SizedBox(
-              width: 54, height: 54,
-              child: product.imageUrl != null
-                  ? CachedNetworkImage(
-                      imageUrl: product.imageUrl!,
-                      fit:      BoxFit.cover,
-                      errorWidget: (_, __, ___) => Container(
-                        color: AppColors.surface2,
-                        child: const Center(child: Text('📦')),
-                      ),
-                    )
-                  : Container(
-                      color: AppColors.surface2,
-                      child: const Center(
-                        child: Text('📦', style: TextStyle(fontSize: 22)),
-                      ),
-                    ),
-            ),
+        opacity: product.isActive ? 1.0 : 0.55,
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.border),
           ),
-          const SizedBox(width: 12),
-
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  product.name,
-                  style: const TextStyle(
-                    color: AppColors.textPrimary, fontWeight: FontWeight.w600,
+          child: Row(
+            children: [
+              // Imagen
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: SizedBox(
+                  width: 54,
+                  height: 54,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      ProductImage(
+                        imageUrl: product.imageUrl,
+                        width: 54,
+                        height: 54,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      if (isUploadingImage)
+                        const ColoredBox(
+                          color: Colors.black38,
+                          child: Center(
+                            child: SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                  strokeWidth: 2, color: Colors.white),
+                            ),
+                          ),
+                        )
+                      else
+                        Positioned(
+                          bottom: 2,
+                          right: 2,
+                          child: GestureDetector(
+                            onTap: onUploadImage,
+                            child: Container(
+                              padding: const EdgeInsets.all(3),
+                              decoration: const BoxDecoration(
+                                color: AppColors.accent,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.photo_camera,
+                                  size: 10, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
-                  maxLines: 1, overflow: TextOverflow.ellipsis,
                 ),
-                if (product.category != null)
-                  Text(product.category!.name,
-                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
-                Row(
+              ),
+              const SizedBox(width: 12),
+
+              // Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      formatPrice(product.price),
+                      product.name,
                       style: const TextStyle(
-                        color: AppColors.accent, fontWeight: FontWeight.bold, fontSize: 14,
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w600,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color:        _stockColor().withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        product.stock == 0 ? 'Agotado' : '${product.stock} uds.',
-                        style: TextStyle(
-                          color:      _stockColor(),
-                          fontSize:   10,
-                          fontWeight: FontWeight.bold,
+                    if (product.category != null)
+                      Text(product.category!.name,
+                          style: const TextStyle(
+                              color: AppColors.textSecondary, fontSize: 12)),
+                    Row(
+                      children: [
+                        Text(
+                          formatPrice(product.price),
+                          style: const TextStyle(
+                            color: AppColors.accent,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: _stockColor().withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            product.stock == 0
+                                ? 'Agotado'
+                                : '${product.stock} uds.',
+                            style: TextStyle(
+                              color: _stockColor(),
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-
-          Column(
-            children: [
-              Switch(
-                value:       product.isActive,
-                onChanged:   (_) => onToggle(),
-                activeThumbColor: AppColors.accent,
               ),
-              Row(
+
+              // Acciones
+              Column(
                 children: [
-                  _ActionIcon(icon: Icons.inventory_2_outlined, color: AppColors.accent,    onTap: onRestock),
-                  _ActionIcon(icon: Icons.edit_outlined,         color: AppColors.textSecondary, onTap: onEdit),
-                  _ActionIcon(icon: Icons.delete_outline,        color: AppColors.error,    onTap: onDelete),
+                  Switch(
+                    value: product.isActive,
+                    onChanged: (_) => onToggle(),
+                    activeThumbColor: AppColors.accent,
+                  ),
+                  Row(
+                    children: [
+                      _ActionIcon(
+                          icon: Icons.inventory_2_outlined,
+                          color: AppColors.accent,
+                          onTap: onRestock),
+                      _ActionIcon(
+                          icon: Icons.edit_outlined,
+                          color: AppColors.textSecondary,
+                          onTap: onEdit),
+                      _ActionIcon(
+                          icon: Icons.delete_outline,
+                          color: AppColors.error,
+                          onTap: onDelete),
+                    ],
+                  ),
                 ],
               ),
             ],
           ),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
 }
 
 class _ActionIcon extends StatelessWidget {
-  final IconData     icon;
-  final Color        color;
+  final IconData icon;
+  final Color color;
   final VoidCallback onTap;
-  const _ActionIcon({required this.icon, required this.color, required this.onTap});
+  const _ActionIcon(
+      {required this.icon, required this.color, required this.onTap});
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-    onTap: onTap,
-    child: Padding(
-      padding: const EdgeInsets.all(4),
-      child:   Icon(icon, color: color, size: 20),
-    ),
-  );
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Icon(icon, color: color, size: 20),
+        ),
+      );
 }
