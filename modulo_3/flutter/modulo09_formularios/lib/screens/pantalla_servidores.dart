@@ -1,28 +1,28 @@
-// lib/screens/pantalla_servidores.dart
 import 'package:flutter/material.dart';
 import 'package:modulo09_formularios/widgets/tarjetaservidorgrid.dart';
-import '../models/servidor_ssh.dart';
+import '../models/telefono.dart';
 import '../widgets/fila_servidor.dart';
-class PantallaServidores extends StatefulWidget {
-  const PantallaServidores({super.key});
+
+class PantallaTelefonos extends StatefulWidget {
+  const PantallaTelefonos({super.key});
   @override
-  State<PantallaServidores> createState() => _PantallaServidoresState();
+  State<PantallaTelefonos> createState() => _PantallaTelefonosState();
 }
 
-class _PantallaServidoresState extends State<PantallaServidores> {
-  final _servidores = [
-    ServidorSSH(id:'1', nombre:'prod-web-01',  ip:'10.0.2.10',   puerto:22,   usuario:'deploy',   so:'Ubuntu 24.04', ssl:true,  favorito:true),
-    ServidorSSH(id:'2', nombre:'prod-db-01',   ip:'10.0.2.20',   puerto:22,   usuario:'postgres', so:'Debian 12',    ssl:true),
-    ServidorSSH(id:'3', nombre:'staging-api',  ip:'10.0.3.10',   puerto:2222, usuario:'ubuntu',   so:'Ubuntu 24.04', ssl:false),
-    ServidorSSH(id:'4', nombre:'dev-sandbox',  ip:'192.168.1.5', puerto:22,   usuario:'vagrant',  so:'Alpine Linux', ssl:false),
+class _PantallaTelefonosState extends State<PantallaTelefonos> {
+  final _telefonos = [
+    Telefono(id:'1', modelo:'Galaxy S25',      marca:'Samsung',  precio:899.99,  stock:15, color:'Negro',    sistema:'Android'),
+    Telefono(id:'2', modelo:'iPhone 16',        marca:'Apple',    precio:999.99,  stock:0,  color:'Blanco',   sistema:'iOS',     disponible: false),
+    Telefono(id:'3', modelo:'Redmi Note 13',    marca:'Xiaomi',   precio:299.99,  stock:8,  color:'Azul',     sistema:'Android', favorito: true),
+    Telefono(id:'4', modelo:'Edge 50 Pro',      marca:'Motorola', precio:449.99,  stock:5,  color:'Gris',     sistema:'Android'),
   ];
 
-  bool _modoGrid = false;   // false = lista, true = cuadrícula
+  bool _modoGrid = false;
 
   void _toggleFavorito(int i) =>
-      setState(() => _servidores[i].favorito = !_servidores[i].favorito);
+      setState(() => _telefonos[i].favorito = !_telefonos[i].favorito);
 
-  void _eliminar(int i) => setState(() => _servidores.removeAt(i));
+  void _eliminar(int i) => setState(() => _telefonos.removeAt(i));
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +30,10 @@ class _PantallaServidoresState extends State<PantallaServidores> {
 
     return Scaffold(
       appBar: AppBar(
-        title:           Text('Servidores (${_servidores.length})'),
+        title:           Text('Teléfonos (${_telefonos.length})'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
         actions: [
-          // Toggle lista / cuadrícula
           IconButton(
             icon:    Icon(_modoGrid ? Icons.list : Icons.grid_view),
             onPressed: () => setState(() => _modoGrid = !_modoGrid),
@@ -51,19 +50,19 @@ class _PantallaServidoresState extends State<PantallaServidores> {
                 crossAxisSpacing: 8,
                 mainAxisSpacing:  8,
               ),
-              itemCount:   _servidores.length,
-              itemBuilder: (ctx, i) => TarjetaServidorGrid(
-                servidor:   _servidores[i],
+              itemCount:   _telefonos.length,
+              itemBuilder: (ctx, i) => TarjetaTelefonoGrid(
+                telefono:   _telefonos[i],
                 onFavorito: () => _toggleFavorito(i),
                 onEliminar: () => _eliminar(i),
               ),
             )
           : ListView.separated(
-              itemCount:        _servidores.length,
+              itemCount:        _telefonos.length,
               separatorBuilder: (_, _) =>
                   const Divider(height: 1, indent: 72),
-              itemBuilder: (ctx, i) => FilaServidor(
-                servidor:   _servidores[i],
+              itemBuilder: (ctx, i) => FilaTelefono(
+                telefono:   _telefonos[i],
                 onFavorito: () => _toggleFavorito(i),
                 onEliminar: () => _eliminar(i),
               ),

@@ -7,15 +7,15 @@ import 'screens/pantalla_dialogs.dart';
 
 const int paso = 6;
 
-void main() => runApp(const AppMonitoreo());
+void main() => runApp(const AppTienda());
 
-class AppMonitoreo extends StatefulWidget {
-  const AppMonitoreo({super.key});
+class AppTienda extends StatefulWidget {
+  const AppTienda({super.key});
   @override
-  State<AppMonitoreo> createState() => _AppMonitoreoState();
+  State<AppTienda> createState() => _AppTiendaState();
 }
 
-class _AppMonitoreoState extends State<AppMonitoreo> {
+class _AppTiendaState extends State<AppTienda> {
   ThemeMode _themeMode = ThemeMode.system;
 
   @override
@@ -61,7 +61,7 @@ class _Paso1 extends StatefulWidget {
 class _Paso1State extends State<_Paso1> {
   bool _useTertiary = false;
   bool _centerTitle = false;
-  bool _useCloud = false;
+  bool _usePhone = false;
   double _iconSize = 64;
   Color _seedColor = const Color(0xFF1565C0);
 
@@ -72,12 +72,12 @@ class _Paso1State extends State<_Paso1> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sistema de Monitoreo'),
+        title: const Text('Tienda Móvil'),
         backgroundColor: _useTertiary ? cs.tertiaryContainer : cs.primaryContainer,
         foregroundColor: _useTertiary ? cs.onTertiaryContainer : cs.onPrimaryContainer,
         centerTitle: _centerTitle,
         actions: [
-          IconButton(icon: const Icon(Icons.refresh), onPressed: () {}),
+          IconButton(icon: const Icon(Icons.shopping_cart), onPressed: () {}),
         ],
       ),
       body: Center(
@@ -85,25 +85,25 @@ class _Paso1State extends State<_Paso1> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              _useCloud ? Icons.cloud : Icons.dns,
+              _usePhone ? Icons.phone_iphone : Icons.phone_android,
               size: _iconSize,
               color: cs.primary,
             ),
             const SizedBox(height: 16),
             Text(
-              'Servidor web-01',
+              'Galaxy S25',
               style: text.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
-              '10.0.2.10 · Ubuntu 24.04',
+              'Samsung · 128GB · \$899.99',
               style: text.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
             ),
             const SizedBox(height: 24),
             FilledButton.icon(
               onPressed: () {},
-              icon: const Icon(Icons.terminal),
-              label: const Text('Conectar SSH'),
+              icon: const Icon(Icons.shopping_cart),
+              label: const Text('Comprar'),
             ),
             const SizedBox(height: 32),
             Card(
@@ -138,9 +138,9 @@ class _Paso1State extends State<_Paso1> {
                           avatar: Icon(Icons.format_align_center, size: 16),
                         ),
                         ActionChip(
-                          label: Text(_useCloud ? 'Icons.cloud' : 'Icons.dns'),
-                          onPressed: () => setState(() => _useCloud = !_useCloud),
-                          avatar: Icon(Icons.cloud, size: 16),
+                          label: Text(_usePhone ? 'iPhone' : 'Android'),
+                          onPressed: () => setState(() => _usePhone = !_usePhone),
+                          avatar: Icon(Icons.phone_android, size: 16),
                         ),
                         ActionChip(
                           label: Text('size: ${_iconSize.round()}'),
@@ -160,7 +160,7 @@ class _Paso1State extends State<_Paso1> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        tooltip: 'Agregar servidor',
+        tooltip: 'Agregar teléfono',
         child: const Icon(Icons.add),
       ),
     );

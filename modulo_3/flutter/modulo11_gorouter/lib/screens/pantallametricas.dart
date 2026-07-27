@@ -1,4 +1,3 @@
-// pantalla_metricas.dart
 import 'package:flutter/material.dart';
 
 class PantallaMetricas extends StatelessWidget {
@@ -11,7 +10,7 @@ class PantallaMetricas extends StatelessWidget {
       children: [
         Icon(Icons.bar_chart, size: 56),
         SizedBox(height: 8),
-        Text('Métricas de servidores', style: TextStyle(fontSize: 18)),
+        Text('Ventas y métricas', style: TextStyle(fontSize: 18)),
       ],
     )),
   );

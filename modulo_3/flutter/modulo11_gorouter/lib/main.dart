@@ -46,7 +46,7 @@ class AppMonitoreo extends ConsumerWidget {
     };
 
     return MaterialApp.router(
-      title:        'Monitor SSH',
+      title:        'Tienda Móvil',
       debugShowCheckedModeBanner: false,
       routerConfig: router,
       theme: ThemeData(

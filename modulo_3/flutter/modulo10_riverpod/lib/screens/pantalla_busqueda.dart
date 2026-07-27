@@ -1,4 +1,3 @@
-// lib/screens/pantalla_busqueda.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/servidores_provider.dart';
@@ -8,16 +7,16 @@ class PantallaBusqueda extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final servidores = ref.watch(servidoresFiltradosProvider);
-    final busqueda   = ref.watch(busquedaProvider);
+    final telefonos = ref.watch(telefonosFiltradosProvider);
+    final busqueda  = ref.watch(busquedaProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Buscar servidores')),
+      appBar: AppBar(title: const Text('Buscar teléfonos')),
       body: Column(children: [
         Padding(
           padding: const EdgeInsets.all(12),
           child: SearchBar(
-            hintText: 'Buscar por nombre o IP...',
+            hintText: 'Buscar por modelo o marca...',
             leading:  const Icon(Icons.search),
             trailing: busqueda.isNotEmpty
                 ? [IconButton(
@@ -34,14 +33,14 @@ class PantallaBusqueda extends ConsumerWidget {
           ),
         ),
         Expanded(
-          child: servidores.isEmpty
+          child: telefonos.isEmpty
               ? const Center(child: Text('Sin resultados'))
               : ListView.builder(
-                  itemCount:   servidores.length,
+                  itemCount:   telefonos.length,
                   itemBuilder: (_, i) => ListTile(
-                    leading: const Icon(Icons.dns),
-                    title:    Text(servidores[i].nombre),
-                    subtitle: Text(servidores[i].ip),
+                    leading: const Icon(Icons.phone_android),
+                    title:    Text(telefonos[i].modelo),
+                    subtitle: Text('${telefonos[i].marca} - \$${telefonos[i].precio.toStringAsFixed(2)}'),
                   ),
                 ),
         ),

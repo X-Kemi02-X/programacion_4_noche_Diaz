@@ -1,55 +1,55 @@
-// lib/widgets/formulario_servidor.dart
 import 'package:flutter/material.dart';
 
-class FormularioServidor extends StatefulWidget {
+class FormularioTelefono extends StatefulWidget {
   final void Function(Map<String, String> datos) onGuardar;
-  const FormularioServidor({super.key, required this.onGuardar});
+  const FormularioTelefono({super.key, required this.onGuardar});
 
   @override
-  State<FormularioServidor> createState() => _FormularioServidorState();
+  State<FormularioTelefono> createState() => _FormularioTelefonoState();
 }
 
-class _FormularioServidorState extends State<FormularioServidor> {
-  final _formKey  = GlobalKey<FormState>();
+class _FormularioTelefonoState extends State<FormularioTelefono> {
+  final _formKey = GlobalKey<FormState>();
 
-  final _ctrlNombre  = TextEditingController();
-  final _ctrlIp      = TextEditingController();
-  final _ctrlPuerto  = TextEditingController(text: '22');
-  final _ctrlUsuario = TextEditingController(text: 'root');
+  final _ctrlModelo = TextEditingController();
+  final _ctrlMarca  = TextEditingController();
+  final _ctrlPrecio = TextEditingController();
+  final _ctrlStock  = TextEditingController(text: '10');
+  final _ctrlColor  = TextEditingController();
 
-  final _focusIp      = FocusNode();
-  final _focusPuerto  = FocusNode();
-  final _focusUsuario = FocusNode();
+  final _focusMarca  = FocusNode();
+  final _focusPrecio = FocusNode();
+  final _focusStock  = FocusNode();
+  final _focusColor  = FocusNode();
 
-  String _so  = 'Ubuntu 24.04';
-  bool   _ssl = true;
-
-  // Expresión regular para validar IPv4
-  static final _regexIp = RegExp(r'^(\d{1,3}\.){3}\d{1,3}$');
+  String _sistema = 'Android';
+  bool   _disponible = true;
 
   @override
   void dispose() {
-    _ctrlNombre.dispose();
-    _ctrlIp.dispose();
-    _ctrlPuerto.dispose();
-    _ctrlUsuario.dispose();
-    _focusIp.dispose();
-    _focusPuerto.dispose();
-    _focusUsuario.dispose();
+    _ctrlModelo.dispose();
+    _ctrlMarca.dispose();
+    _ctrlPrecio.dispose();
+    _ctrlStock.dispose();
+    _ctrlColor.dispose();
+    _focusMarca.dispose();
+    _focusPrecio.dispose();
+    _focusStock.dispose();
+    _focusColor.dispose();
     super.dispose();
   }
 
   void _guardar() {
-    // validate() llama al validator de TODOS los TextFormField del Form
     if (!_formKey.currentState!.validate()) return;
 
     widget.onGuardar({
-      'nombre':  _ctrlNombre.text,
-      'ip':      _ctrlIp.text,
-      'puerto':  _ctrlPuerto.text,
-      'usuario': _ctrlUsuario.text,
-      'so':      _so,
-      'ssl':     _ssl.toString(),
+      'modelo':     _ctrlModelo.text,
+      'marca':      _ctrlMarca.text,
+      'precio':     _ctrlPrecio.text,
+      'stock':      _ctrlStock.text,
+      'color':      _ctrlColor.text,
+      'sistema':    _sistema,
+      'disponible': _disponible.toString(),
     });
   }
 
@@ -60,115 +60,108 @@ class _FormularioServidorState extends State<FormularioServidor> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-
-          // ── Nombre del servidor ───────────────────────────────────
           TextFormField(
-            controller:      _ctrlNombre,
+            controller:      _ctrlModelo,
             decoration:      const InputDecoration(
-              labelText:  'Nombre del servidor',
-              hintText:   'prod-web-01',
-              prefixIcon: Icon(Icons.dns),
+              labelText:  'Modelo',
+              hintText:   'Galaxy S25',
+              prefixIcon: Icon(Icons.phone_android),
               border:     OutlineInputBorder(),
             ),
             textInputAction: TextInputAction.next,
-            onFieldSubmitted: (_) => _focusIp.requestFocus(),
+            onFieldSubmitted: (_) => _focusMarca.requestFocus(),
             validator: (v) {
-              if (v == null || v.trim().isEmpty) return 'El nombre es obligatorio';
+              if (v == null || v.trim().isEmpty) return 'El modelo es obligatorio';
               if (v.length < 3)                  return 'Mínimo 3 caracteres';
-              if (!RegExp(r'^[a-zA-Z0-9\-\_]+$').hasMatch(v)) {
-                return 'Solo letras, números, guiones y guiones bajos';
-              }
               return null;
             },
           ),
           const SizedBox(height: 12),
-
-          // ── Dirección IP ──────────────────────────────────────────
           TextFormField(
-            controller:      _ctrlIp,
-            focusNode:       _focusIp,
+            controller:      _ctrlMarca,
+            focusNode:       _focusMarca,
             decoration:      const InputDecoration(
-              labelText:  'Dirección IP',
-              hintText:   '192.168.1.100',
-              prefixIcon: Icon(Icons.router),
-              border:     OutlineInputBorder(),
-            ),
-            keyboardType:    TextInputType.number,
-            textInputAction: TextInputAction.next,
-            onFieldSubmitted: (_) => _focusPuerto.requestFocus(),
-            validator: (v) {
-              if (v == null || v.isEmpty) return 'La IP es obligatoria';
-              if (!_regexIp.hasMatch(v))  return 'Formato IPv4 inválido (ej. 192.168.1.10)';
-              final octetos = v.split('.').map(int.parse).toList();
-              if (octetos.any((o) => o > 255)) return 'Octeto fuera de rango (0–255)';
-              return null;
-            },
-          ),
-          const SizedBox(height: 12),
-
-          // ── Puerto SSH ────────────────────────────────────────────
-          TextFormField(
-            controller:      _ctrlPuerto,
-            focusNode:       _focusPuerto,
-            decoration:      const InputDecoration(
-              labelText:  'Puerto',
-              prefixIcon: Icon(Icons.lock_outline),
-              border:     OutlineInputBorder(),
-            ),
-            keyboardType:    TextInputType.number,
-            textInputAction: TextInputAction.next,
-            onFieldSubmitted: (_) => _focusUsuario.requestFocus(),
-            validator: (v) {
-              final puerto = int.tryParse(v ?? '');
-              if (puerto == null)              return 'Puerto debe ser un número';
-              if (puerto < 1 || puerto > 65535) return 'Puerto entre 1 y 65535';
-              return null;
-            },
-          ),
-          const SizedBox(height: 12),
-
-          // ── Usuario ───────────────────────────────────────────────
-          TextFormField(
-            controller:      _ctrlUsuario,
-            focusNode:       _focusUsuario,
-            decoration:      const InputDecoration(
-              labelText:  'Usuario',
-              prefixIcon: Icon(Icons.person_outline),
+              labelText:  'Marca',
+              hintText:   'Samsung',
+              prefixIcon: Icon(Icons.badge),
               border:     OutlineInputBorder(),
             ),
             textInputAction: TextInputAction.next,
+            onFieldSubmitted: (_) => _focusPrecio.requestFocus(),
             validator: (v) =>
-                v == null || v.trim().isEmpty ? 'El usuario es obligatorio' : null,
+                v == null || v.trim().isEmpty ? 'La marca es obligatoria' : null,
           ),
           const SizedBox(height: 12),
-
-          // ── Sistema Operativo — DropdownButtonFormField ────────────
+          TextFormField(
+            controller:      _ctrlPrecio,
+            focusNode:       _focusPrecio,
+            decoration:      const InputDecoration(
+              labelText:  'Precio',
+              prefixIcon: Icon(Icons.attach_money),
+              border:     OutlineInputBorder(),
+            ),
+            keyboardType:    TextInputType.number,
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (_) => _focusStock.requestFocus(),
+            validator: (v) {
+              final precio = double.tryParse(v ?? '');
+              if (precio == null)       return 'Precio debe ser un número';
+              if (precio <= 0)          return 'Precio debe ser mayor a 0';
+              return null;
+            },
+          ),
+          const SizedBox(height: 12),
+          TextFormField(
+            controller:      _ctrlStock,
+            focusNode:       _focusStock,
+            decoration:      const InputDecoration(
+              labelText:  'Stock',
+              prefixIcon: Icon(Icons.inventory),
+              border:     OutlineInputBorder(),
+            ),
+            keyboardType:    TextInputType.number,
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (_) => _focusColor.requestFocus(),
+            validator: (v) {
+              final stock = int.tryParse(v ?? '');
+              if (stock == null)       return 'Stock debe ser un número entero';
+              if (stock < 0)           return 'Stock no puede ser negativo';
+              return null;
+            },
+          ),
+          const SizedBox(height: 12),
+          TextFormField(
+            controller:      _ctrlColor,
+            focusNode:       _focusColor,
+            decoration:      const InputDecoration(
+              labelText:  'Color',
+              hintText:   'Negro',
+              prefixIcon: Icon(Icons.palette),
+              border:     OutlineInputBorder(),
+            ),
+            textInputAction: TextInputAction.next,
+          ),
+          const SizedBox(height: 12),
           DropdownButtonFormField<String>(
-            initialValue: _so,
+            initialValue: _sistema,
             decoration: const InputDecoration(
               labelText:  'Sistema Operativo',
-              prefixIcon: Icon(Icons.computer),
+              prefixIcon: Icon(Icons.settings),
               border:     OutlineInputBorder(),
             ),
-            items: [
-              'Ubuntu 24.04', 'Debian 12', 'CentOS Stream 9',
-              'Rocky Linux 9', 'Alpine Linux',
-            ].map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
-            onChanged: (v) => setState(() => _so = v!),
+            items: ['Android', 'iOS', 'HarmonyOS', 'Sin sistema']
+                .map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
+            onChanged: (v) => setState(() => _sistema = v!),
           ),
           const SizedBox(height: 8),
-
-          // ── SSL — SwitchListTile ──────────────────────────────────
           SwitchListTile(
-            title:     const Text('Conexión SSL/TLS'),
-            subtitle:  const Text('Cifrar la comunicación'),
-            value:     _ssl,
-            onChanged: (v) => setState(() => _ssl = v),
-            secondary: const Icon(Icons.security),
+            title:     const Text('Disponible'),
+            subtitle:  const Text('Mostrar en catálogo'),
+            value:     _disponible,
+            onChanged: (v) => setState(() => _disponible = v),
+            secondary: const Icon(Icons.visibility),
           ),
           const SizedBox(height: 16),
-
-          // ── Botones ───────────────────────────────────────────────
           Row(children: [
             Expanded(
               child: OutlinedButton(
@@ -182,7 +175,7 @@ class _FormularioServidorState extends State<FormularioServidor> {
               child: FilledButton.icon(
                 onPressed: _guardar,
                 icon:  const Icon(Icons.save),
-                label: const Text('Guardar servidor'),
+                label: const Text('Guardar teléfono'),
               ),
             ),
           ]),

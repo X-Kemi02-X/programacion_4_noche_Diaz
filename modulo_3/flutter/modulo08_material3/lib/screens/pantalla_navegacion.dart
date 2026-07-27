@@ -17,7 +17,7 @@ class _PantallaNavegacionState extends State<PantallaNavegacion> {
 
     return Scaffold(
       appBar: AppBar(
-        title:           const Text('Sistema de Monitoreo'),
+        title:           const Text('Tienda Móvil'),
         backgroundColor: cs.surfaceContainerHighest,
         actions: [
           ActionChip(
@@ -47,9 +47,9 @@ class _PantallaNavegacionState extends State<PantallaNavegacion> {
             label:        'Dashboard',
           ),
           NavigationDestination(
-            icon:         Icon(Icons.dns_outlined),
-            selectedIcon: Icon(Icons.dns),
-            label:        'Servidores',
+            icon:         Icon(Icons.phone_android_outlined),
+            selectedIcon: Icon(Icons.phone_android),
+            label:        'Teléfonos',
           ),
           NavigationDestination(
             icon:         Badge(label: Text('3'), child: Icon(Icons.notifications_outlined)),
@@ -81,15 +81,15 @@ class _PantallaDashboard extends StatelessWidget {
         Text('Resumen', style: text.headlineSmall),
         const SizedBox(height: 16),
         Row(children: [
-          Expanded(child: _TarjetaMetrica(titulo: 'Servidores', valor: '8',  icono: Icons.dns,          color: cs.primaryContainer)),
+          Expanded(child: _TarjetaMetrica(titulo: 'Teléfonos',  valor: '12',  icono: Icons.phone_android, color: cs.primaryContainer)),
           const SizedBox(width: 8),
-          Expanded(child: _TarjetaMetrica(titulo: 'Alertas',    valor: '3',  icono: Icons.notifications, color: cs.errorContainer)),
+          Expanded(child: _TarjetaMetrica(titulo: 'Ofertas',    valor: '3',   icono: Icons.discount,     color: cs.errorContainer)),
         ]),
         const SizedBox(height: 8),
         Row(children: [
-          Expanded(child: _TarjetaMetrica(titulo: 'Uptime',   valor: '99.8%', icono: Icons.trending_up, color: cs.tertiaryContainer)),
+          Expanded(child: _TarjetaMetrica(titulo: 'Stock total', valor: '42',    icono: Icons.inventory,   color: cs.tertiaryContainer)),
           const SizedBox(width: 8),
-          Expanded(child: _TarjetaMetrica(titulo: 'Tráfico',  valor: '4.2 GB', icono: Icons.wifi,       color: cs.secondaryContainer)),
+          Expanded(child: _TarjetaMetrica(titulo: 'Valor',       valor: '\$8,500', icono: Icons.attach_money, color: cs.secondaryContainer)),
         ]),
       ],
     );
@@ -141,15 +141,20 @@ class _PantallaServidores extends StatelessWidget {
     return ListView.builder(
       padding: const EdgeInsets.all(8),
       itemCount: 6,
-      itemBuilder: (ctx, i) => Card(
-        child: ListTile(
-          leading:  Icon(Icons.dns, color: cs.primary),
-          title:    Text('prod-web-0${i + 1}'),
-          subtitle: Text('10.0.2.${i + 10} · Activo'),
-          trailing: Icon(Icons.chevron_right, color: cs.onSurfaceVariant),
-          onTap: () {},
-        ),
-      ),
+      itemBuilder: (ctx, i) {
+        final modelos = ['Galaxy S25', 'iPhone 16', 'Redmi Note 13', 'Edge 50', 'Pixel 8', 'Xperia 1'];
+        final marcas  = ['Samsung', 'Apple', 'Xiaomi', 'Motorola', 'Google', 'Sony'];
+        final precios = [899.99, 999.99, 299.99, 449.99, 599.99, 799.99];
+        return Card(
+          child: ListTile(
+            leading:  Icon(Icons.phone_android, color: cs.primary),
+            title:    Text(modelos[i]),
+            subtitle: Text('${marcas[i]} · \$${precios[i]}'),
+            trailing: Icon(Icons.chevron_right, color: cs.onSurfaceVariant),
+            onTap: () {},
+          ),
+        );
+      },
     );
   }
 }
@@ -163,9 +168,9 @@ class _PantallaAlertas extends StatelessWidget {
     final text = Theme.of(context).textTheme;
 
     const alertas = [
-      (servidor: 'prod-db-01',  mensaje: 'CPU > 90%',         nivel: 'CRÍTICO'),
-      (servidor: 'prod-web-03', mensaje: 'Disco al 85%',       nivel: 'AVISO'),
-      (servidor: 'prod-api-02', mensaje: 'Reinicio inesperado', nivel: 'CRÍTICO'),
+      (servidor: 'Galaxy S25',  mensaje: 'Stock bajo (2 uds)', nivel: 'CRÍTICO'),
+      (servidor: 'iPhone 16',   mensaje: 'Agotado',            nivel: 'CRÍTICO'),
+      (servidor: 'Redmi Note',  mensaje: 'Precio desactualizado', nivel: 'AVISO'),
     ];
 
     return ListView.builder(

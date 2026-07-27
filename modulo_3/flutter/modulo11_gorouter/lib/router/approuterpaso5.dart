@@ -1,4 +1,3 @@
-// lib/router/app_router_paso5.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -11,7 +10,6 @@ import '../screens/pantalla_ajustes.dart';
 import '../screens/pantalla_login.dart';
 import '../models/servidor_ssh.dart';
 
-// Función que crea el router con acceso al WidgetRef (para el guard)
 GoRouter appRouterPaso5(WidgetRef ref) => GoRouter(
   initialLocation: '/servidores',
   debugLogDiagnostics: true,
@@ -20,11 +18,8 @@ GoRouter appRouterPaso5(WidgetRef ref) => GoRouter(
     final autenticado   = authState is Autenticado;
     final enLogin       = state.matchedLocation == '/login';
 
-    // No autenticado y no está en /login → ir al login
     if (!autenticado && !enLogin) return '/login';
-    // Autenticado y está en /login → ir a la app
     if (autenticado && enLogin)   return '/servidores';
-    // Sin redirección
     return null;
   },
   routes: [
@@ -33,13 +28,13 @@ GoRouter appRouterPaso5(WidgetRef ref) => GoRouter(
       routes: [
         GoRoute(
           path:    '/servidores',
-          builder: (_, __) => const PantallaServidores(),
+          builder: (_, __) => const PantallaTelefonos(),
           routes: [
             GoRoute(
               path:    ':id',
               builder: (context, state) => PantallaDetalle(
                 id:       state.pathParameters['id']!,
-                servidor: state.extra as ServidorSSH?,
+                telefono: state.extra as Telefono?,
               ),
             ),
           ],

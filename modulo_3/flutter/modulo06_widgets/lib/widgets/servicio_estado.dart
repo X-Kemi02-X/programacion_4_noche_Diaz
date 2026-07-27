@@ -9,52 +9,41 @@ class ServicioEstado extends StatefulWidget {
 }
 
 class _ServicioEstadoState extends State<ServicioEstado> {
-  bool _activo    = true;
-  int  _reinicios = 0;
-
-  static const int _maxReinicios = 3;
+  bool _disponible = true;
+  int  _ventas     = 0;
 
   void _toggle() {
-    setState(() {              // notifica a Flutter → rebuild
-      _activo = !_activo;
-      if (_activo) _reinicios++;
+    setState(() {
+      _disponible = !_disponible;
+      if (_disponible) _ventas++;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final enLimite = _reinicios >= _maxReinicios;
-
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-
-          // ── Patrón 1: Ícono + color condicional ─────────────────
           Icon(
-            _activo ? Icons.check_circle : Icons.cancel,
+            _disponible ? Icons.check_circle : Icons.cancel,
             size:  72,
-            color: _activo ? Colors.green : Colors.red,
+            color: _disponible ? Colors.green : Colors.red,
           ),
           const SizedBox(height: 8),
-
           Text(widget.nombre,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-
-          // ── Patrón 2: Texto condicional ──────────────────────────
           Text(
-            _activo ? 'En línea' : 'Fuera de línea',
+            _disponible ? 'En stock' : 'Agotado',
             style: TextStyle(
               fontSize:   15,
               fontWeight: FontWeight.w600,
-              color:      _activo ? Colors.green.shade700 : Colors.red.shade700,
+              color:      _disponible ? Colors.green.shade700 : Colors.red.shade700,
             ),
           ),
           const SizedBox(height: 16),
-
-          // ── Patrón 3: Widget que aparece / desaparece ────────────
-          if (!_activo)
+          if (!_disponible)
             Container(
               margin:     const EdgeInsets.only(bottom: 16),
               padding:    const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -68,45 +57,24 @@ class _ServicioEstadoState extends State<ServicioEstado> {
                 children: [
                   Icon(Icons.warning_amber, color: Colors.red, size: 16),
                   SizedBox(width: 6),
-                  Text('Requiere atención',
+                  Text('Sin stock',
                       style: TextStyle(color: Colors.red, fontSize: 13)),
                 ],
               ),
             ),
-
-          // ── Patrón 4: Botón con texto, color y estado dinámicos ──
           FilledButton.icon(
-            onPressed: enLimite ? null : _toggle,    // null = desactivado
-            icon: Icon(_activo ? Icons.stop : Icons.play_arrow),
-            label: Text(_activo ? 'Detener servicio' : 'Iniciar servicio'),
+            onPressed: _toggle,
+            icon: Icon(_disponible ? Icons.remove_shopping_cart : Icons.add_shopping_cart),
+            label: Text(_disponible ? 'Marcar agotado' : 'Reponer stock'),
             style: FilledButton.styleFrom(
-              backgroundColor: _activo ? Colors.red.shade600 : Colors.green.shade600,
+              backgroundColor: _disponible ? Colors.red.shade600 : Colors.green.shade600,
             ),
           ),
           const SizedBox(height: 12),
-
-          // ── Patrón 5: Opacidad condicional ───────────────────────
-          Opacity(
-            opacity: enLimite ? 0.4 : 1.0,
-            child: Text(
-              'Reinicios: $_reinicios / $_maxReinicios',
-              style: TextStyle(
-                fontSize: 13,
-                color:    enLimite ? Colors.red : Colors.grey.shade600,
-              ),
-            ),
+          Text(
+            'Ventas: $_ventas',
+            style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
           ),
-
-          // ── Patrón 6: Widget condicional por otro estado ─────────
-          if (enLimite)
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text(
-                'Límite de reinicios alcanzado',
-                style: TextStyle(
-                    fontSize: 12, color: Colors.red.shade700, fontWeight: FontWeight.bold),
-              ),
-            ),
         ],
       ),
     );

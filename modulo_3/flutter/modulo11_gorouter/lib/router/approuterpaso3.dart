@@ -1,7 +1,5 @@
-// lib/router/app_router_paso3.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:modulo11_gorouter/screens/pantallaservidoresfiltro.dart';
 import '../screens/pantalla_inicio.dart';
 import '../screens/pantallaservidoresfiltro.dart';
 import '../screens/pantalla_detalle.dart';
@@ -17,17 +15,15 @@ final appRouterPaso3 = GoRouter(
     GoRoute(
       path:    '/servidores',
       builder: (context, state) {
-        // Query parameters — /servidores?soloSSL=true
-        final soloSSL = state.uri.queryParameters['soloSSL'] == 'true';
-        return PantallaServidoresFiltro(soloSSL: soloSSL);
+        return const PantallaTelefonosFiltro();
       },
     ),
     GoRoute(
       path:    '/servidores/:id',
       builder: (context, state) {
-        final id       = state.pathParameters['id']!;
-        final servidor = state.extra as ServidorSSH?;
-        return PantallaDetalle(id: id, servidor: servidor);
+        final id  = state.pathParameters['id']!;
+        final tel = state.extra as Telefono?;
+        return PantallaDetalle(id: id, telefono: tel);
       },
     ),
   ],

@@ -1,4 +1,3 @@
-// lib/screens/scaffold_con_nav.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -6,18 +5,17 @@ class ScaffoldConNav extends StatelessWidget {
   final Widget child;
   const ScaffoldConNav({super.key, required this.child});
 
-  // Detecta la ruta activa para resaltar la tab correcta
   int _indiceActivo(BuildContext context) {
     final loc = GoRouterState.of(context).uri.path;
     if (loc.startsWith('/metricas')) return 1;
     if (loc.startsWith('/ajustes'))  return 2;
-    return 0; // /servidores
+    return 0;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: child,    // child cambia, el Scaffold NO se reconstruye
+      body: child,
       bottomNavigationBar: NavigationBar(
         selectedIndex:         _indiceActivo(context),
         onDestinationSelected: (i) {
@@ -29,8 +27,8 @@ class ScaffoldConNav extends StatelessWidget {
         },
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.dns_outlined), selectedIcon: Icon(Icons.dns),
-            label: 'Servidores',
+            icon: Icon(Icons.phone_android_outlined), selectedIcon: Icon(Icons.phone_android),
+            label: 'Teléfonos',
           ),
           NavigationDestination(
             icon: Icon(Icons.bar_chart_outlined), selectedIcon: Icon(Icons.bar_chart),

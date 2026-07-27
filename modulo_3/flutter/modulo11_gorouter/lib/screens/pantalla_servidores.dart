@@ -1,33 +1,30 @@
-// lib/screens/pantalla_servidores.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modulo11_gorouter/models/servidor_ssh.dart';
 
-class PantallaServidores extends StatelessWidget {
-  const PantallaServidores({super.key});
+class PantallaTelefonos extends StatelessWidget {
+  const PantallaTelefonos({super.key});
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final servidores = servidoresSimulados;
-    
+    final telefonos = telefonosSimulados;
 
     return Scaffold(
       appBar: AppBar(
-        title:           const Text('Servidores'),
+        title:           const Text('Teléfonos'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
       ),
       body: ListView.builder(
-        itemCount:   servidores.length,
+        itemCount:   telefonos.length,
         itemBuilder: (context, i) => ListTile(
-          leading: const Icon(Icons.dns),
-          title:   Text(servidores[i].nombre),
+          leading: const Icon(Icons.phone_android),
+          title:   Text(telefonos[i].modelo),
+          subtitle: Text('${telefonos[i].marca} - \$${telefonos[i].precio.toStringAsFixed(2)}'),
           onTap: () {
-            // context.push() — apila la pantalla (aparece botón "atrás")
-            context.push('/servidores/${servidores[i]}');
-            context.push('/servidores[i].id',
-              extra: servidores[i],
+            context.push('/servidores/${telefonos[i].id}',
+              extra: telefonos[i],
             );
           },
         ),

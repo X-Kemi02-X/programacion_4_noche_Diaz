@@ -1,15 +1,14 @@
-// lib/widgets/fila_servidor.dart
 import 'package:flutter/material.dart';
-import '../models/servidor_ssh.dart';
+import '../models/telefono.dart';
 
-class FilaServidor extends StatelessWidget {
-  final ServidorSSH  servidor;
+class FilaTelefono extends StatelessWidget {
+  final Telefono     telefono;
   final VoidCallback onFavorito;
   final VoidCallback onEliminar;
 
-  const FilaServidor({
+  const FilaTelefono({
     super.key,
-    required this.servidor,
+    required this.telefono,
     required this.onFavorito,
     required this.onEliminar,
   });
@@ -19,36 +18,34 @@ class FilaServidor extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
 
     return ListTile(
-      // leading — icono con color según SSL
       leading: CircleAvatar(
-        backgroundColor: servidor.ssl
+        backgroundColor: telefono.disponible
             ? cs.primaryContainer
             : cs.surfaceContainerHighest,
         child: Icon(
-          Icons.dns,
-          color: servidor.ssl ? cs.onPrimaryContainer : cs.onSurfaceVariant,
+          Icons.phone_android,
+          color: telefono.disponible ? cs.onPrimaryContainer : cs.onSurfaceVariant,
         ),
       ),
       title: Text(
-        servidor.nombre,
+        telefono.modelo,
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
       subtitle: Text(
-        '${servidor.usuario}@${servidor.ip}:${servidor.puerto}',
+        '${telefono.marca} - \$${telefono.precio.toStringAsFixed(2)}',
         style: TextStyle(fontSize: 12, color: cs.onSurfaceVariant),
       ),
-      // trailing — dos acciones compactas
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
             icon: Icon(
-              servidor.favorito ? Icons.star : Icons.star_border,
-              color: servidor.favorito ? Colors.amber : cs.outline,
+              telefono.favorito ? Icons.star : Icons.star_border,
+              color: telefono.favorito ? Colors.amber : cs.outline,
             ),
             onPressed:     onFavorito,
             visualDensity: VisualDensity.compact,
-            tooltip:       servidor.favorito ? 'Quitar favorito' : 'Agregar a favoritos',
+            tooltip:       telefono.favorito ? 'Quitar favorito' : 'Agregar a favoritos',
           ),
           IconButton(
             icon:          Icon(Icons.delete_outline, color: cs.error),

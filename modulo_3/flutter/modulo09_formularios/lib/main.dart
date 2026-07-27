@@ -1,26 +1,18 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'widgets/formulario_servidor.dart';
-import 'models/servidor_ssh.dart';
+import 'models/telefono.dart';
 import 'widgets/fila_servidor.dart';
 import 'screens/pantalla_servidores.dart';
 import 'screens/pantalla_busqueda.dart';
 
-// ┌──────────────────────────────────────────────────────────────────┐
-// │  Cambia este número y guarda (Ctrl+S) para navegar entre pasos. │
-// │  1  Paso 1  TextField + TextEditingController + FocusNode       │
-// │  2  Paso 2  Form + TextFormField + validación                   │
-// │  3  Paso 3  Modelo + ListView.builder + ListTile acciones       │
-// │  4  Paso 4  GridView.builder + toggle lista/grid                │
-// │  5  Paso 5  SearchBar + filtrado en tiempo real                 │
-// └──────────────────────────────────────────────────────────────────┘
 const int paso = 4;
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,
   theme: ThemeData(
     colorScheme: ColorScheme.fromSeed(
-      seedColor: const Color(0xFF1B5E20),
+      seedColor: const Color(0xFF1565C0),
     ),
     useMaterial3: true,
   ),
@@ -28,13 +20,12 @@ void main() => runApp(MaterialApp(
     1 => const _Paso1(),
     2 => const _Paso2(),
     3 => const _Paso3(),
-    4 => const PantallaServidores(),
+    4 => const PantallaTelefonos(),
     5 => const PantallaBusqueda(),
     _ => Scaffold(body: Center(child: Text('Paso $paso no definido'))),
   },
 ));
 
-// ─── Paso 1 ────────────────────────────────────────────────────────────
 class _Paso1 extends StatefulWidget {
   const _Paso1();
   @override
@@ -42,20 +33,21 @@ class _Paso1 extends StatefulWidget {
 }
 
 class _Paso1State extends State<_Paso1> {
-  final _ctrlHostname = TextEditingController();
-  final _ctrlIp       = TextEditingController();
-  final _ctrlService = TextEditingController();
-  final _ctrlPuerto   = TextEditingController(text: '22');
-  final _focusIp      = FocusNode();
-  final _focusPuerto  = FocusNode();
+  final _ctrlModelo = TextEditingController();
+  final _ctrlMarca  = TextEditingController();
+  final _ctrlPrecio = TextEditingController();
+  final _ctrlStock  = TextEditingController(text: '10');
+  final _focusMarca = FocusNode();
+  final _focusPrecio = FocusNode();
 
   @override
   void dispose() {
-    _ctrlHostname.dispose();
-    _ctrlIp.dispose();
-    _ctrlPuerto.dispose();
-    _focusIp.dispose();
-    _focusPuerto.dispose();
+    _ctrlModelo.dispose();
+    _ctrlMarca.dispose();
+    _ctrlPrecio.dispose();
+    _ctrlStock.dispose();
+    _focusMarca.dispose();
+    _focusPrecio.dispose();
     super.dispose();
   }
 
@@ -65,7 +57,7 @@ class _Paso1State extends State<_Paso1> {
 
     return Scaffold(
       appBar: AppBar(
-        title:           const Text('Conexión SSH'),
+        title:           const Text('Registrar Teléfono'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
       ),
@@ -75,56 +67,52 @@ class _Paso1State extends State<_Paso1> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
-              controller:      _ctrlHostname,
+              controller:      _ctrlModelo,
               decoration:      const InputDecoration(
-                labelText:  'Hostname',
-                hintText:   'prod-web-01',
-                prefixIcon: Icon(Icons.dns),
+                labelText:  'Modelo',
+                hintText:   'Galaxy S25',
+                prefixIcon: Icon(Icons.phone_android),
                 border:     OutlineInputBorder(),
               ),
               textInputAction: TextInputAction.next,
-              onSubmitted:     (_) => _focusIp.requestFocus(),
+              onSubmitted:     (_) => _focusMarca.requestFocus(),
             ),
             const SizedBox(height: 12),
             TextField(
-              controller:      _ctrlIp,
-              focusNode:       _focusIp,
+              controller:      _ctrlMarca,
+              focusNode:       _focusMarca,
               decoration:      const InputDecoration(
-                labelText:  'Dirección IP',
-                hintText:   '192.168.1.100',
-                prefixIcon: Icon(Icons.router),
+                labelText:  'Marca',
+                hintText:   'Samsung',
+                prefixIcon: Icon(Icons.badge),
+                border:     OutlineInputBorder(),
+              ),
+              textInputAction: TextInputAction.next,
+              onSubmitted:     (_) => _focusPrecio.requestFocus(),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller:      _ctrlPrecio,
+              focusNode:       _focusPrecio,
+              decoration:      const InputDecoration(
+                labelText:  'Precio',
+                prefixIcon: Icon(Icons.attach_money),
                 border:     OutlineInputBorder(),
               ),
               keyboardType:    TextInputType.number,
               textInputAction: TextInputAction.next,
-              onSubmitted:     (_) => _focusPuerto.requestFocus(),
+              onSubmitted:     (_) => FocusScope.of(context).unfocus(),
             ),
             const SizedBox(height: 12),
             TextField(
-              controller:      _ctrlService,
+              controller:      _ctrlStock,
               decoration:      const InputDecoration(
-                labelText:  'Service',
-                hintText:   'http',
-                prefixIcon: Icon(Icons.router),
-                border:     OutlineInputBorder(),
-              ),
-              keyboardType:    TextInputType.number,
-              textInputAction: TextInputAction.next,
-              onSubmitted:     (_) => _focusPuerto.requestFocus(),
-            ),
-            
-            const SizedBox(height: 12),
-            TextField(
-              controller:      _ctrlPuerto,
-              focusNode:       _focusPuerto,
-              decoration:      const InputDecoration(
-                labelText:  'Puerto SSH',
-                prefixIcon: Icon(Icons.lock_outline),
+                labelText:  'Stock',
+                prefixIcon: Icon(Icons.inventory),
                 border:     OutlineInputBorder(),
               ),
               keyboardType:    TextInputType.number,
               textInputAction: TextInputAction.done,
-              onSubmitted:     (_) => FocusScope.of(context).unfocus(),
             ),
             const SizedBox(height: 20),
             FilledButton.icon(
@@ -132,27 +120,13 @@ class _Paso1State extends State<_Paso1> {
                 FocusScope.of(context).unfocus();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(
-                      'Conectando a ${_ctrlHostname.text} '
-                      '(${_ctrlIp.text}:${_ctrlPuerto.text}) '
-                      'Service: ${_ctrlService.text}'
-                    ),
+                    content: Text('${_ctrlModelo.text} (${_ctrlMarca.text}) registrado'),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
               },
-              icon:  const Icon(Icons.terminal),
-              label: const Text('Conectar'),
-            ),
-            const SizedBox(height: 8),
-            OutlinedButton(
-              onPressed: () {
-                _ctrlHostname.clear();
-                _ctrlIp.clear();
-                _ctrlService.clear();
-                _ctrlPuerto.text = '22';
-              },
-              child: const Text('Limpiar campos'),
+              icon:  const Icon(Icons.save),
+              label: const Text('Guardar'),
             ),
           ],
         ),
@@ -161,7 +135,6 @@ class _Paso1State extends State<_Paso1> {
   }
 }
 
-// ─── Paso 2 ────────────────────────────────────────────────────────────
 class _Paso2 extends StatelessWidget {
   const _Paso2();
 
@@ -171,18 +144,18 @@ class _Paso2 extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title:           const Text('Nuevo servidor'),
+        title:           const Text('Nuevo teléfono'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: FormularioServidor(
+        child: FormularioTelefono(
           onGuardar: (datos) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                    'Guardado: ${datos['nombre']} — ${datos['ip']}:${datos['puerto']}'),
+                    'Guardado: ${datos['modelo']} — ${datos['marca']} \$${datos['precio']}'),
                 behavior: SnackBarBehavior.floating,
               ),
             );
@@ -193,7 +166,6 @@ class _Paso2 extends StatelessWidget {
   }
 }
 
-// ─── Paso 3 ────────────────────────────────────────────────────────────
 class _Paso3 extends StatefulWidget {
   const _Paso3();
   @override
@@ -201,11 +173,11 @@ class _Paso3 extends StatefulWidget {
 }
 
 class _Paso3State extends State<_Paso3> {
-  final _servidores = [
-    ServidorSSH(id:'1', nombre:'prod-web-01',  ip:'10.0.2.10',   puerto:22,   usuario:'deploy',   so:'Ubuntu 24.04', ssl:true,  favorito:true),
-    ServidorSSH(id:'2', nombre:'prod-db-01',   ip:'10.0.2.20',   puerto:22,   usuario:'postgres', so:'Debian 12',    ssl:true),
-    ServidorSSH(id:'3', nombre:'staging-api',  ip:'10.0.3.10',   puerto:2222, usuario:'ubuntu',   so:'Ubuntu 24.04', ssl:false),
-    ServidorSSH(id:'4', nombre:'dev-sandbox',  ip:'192.168.1.5', puerto:22,   usuario:'vagrant',  so:'Alpine Linux', ssl:false),
+  final _telefonos = [
+    Telefono(id:'1', modelo:'Galaxy S25',    marca:'Samsung',  precio:899.99,  stock:15, color:'Negro',  sistema:'Android', favorito:true),
+    Telefono(id:'2', modelo:'iPhone 16',      marca:'Apple',    precio:999.99,  stock:0,  color:'Blanco', sistema:'iOS',     disponible: false),
+    Telefono(id:'3', modelo:'Redmi Note 13',  marca:'Xiaomi',   precio:299.99,  stock:8,  color:'Azul',   sistema:'Android'),
+    Telefono(id:'4', modelo:'Edge 50 Pro',    marca:'Motorola', precio:449.99,  stock:5,  color:'Gris',   sistema:'Android'),
   ];
 
   @override
@@ -214,32 +186,29 @@ class _Paso3State extends State<_Paso3> {
 
     return Scaffold(
       appBar: AppBar(
-        title:           Text('Servidores (${_servidores.length})'),
+        title:           Text('Teléfonos (${_telefonos.length})'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
       ),
-      body: _servidores.isEmpty
+      body: _telefonos.isEmpty
           ? Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.dns_outlined, size: 56, color: cs.onSurfaceVariant),
+                  Icon(Icons.phone_android, size: 56, color: cs.onSurfaceVariant),
                   const SizedBox(height: 12),
-                  Text('Sin servidores',
-                      style: TextStyle(color: cs.onSurfaceVariant)),
+                  Text('Sin teléfonos', style: TextStyle(color: cs.onSurfaceVariant)),
                 ],
               ),
             )
           : ListView.separated(
-              itemCount:        _servidores.length,
-              separatorBuilder: (_, _) =>
-                  const Divider(height: 1, indent: 72),
-              itemBuilder: (ctx, i) => FilaServidor(
-                servidor:   _servidores[i],
+              itemCount:        _telefonos.length,
+              separatorBuilder: (_, _) => const Divider(height: 1, indent: 72),
+              itemBuilder: (ctx, i) => FilaTelefono(
+                telefono:   _telefonos[i],
                 onFavorito: () => setState(() =>
-                    _servidores[i].favorito = !_servidores[i].favorito),
-                onEliminar: () =>
-                    setState(() => _servidores.removeAt(i)),
+                    _telefonos[i].favorito = !_telefonos[i].favorito),
+                onEliminar: () => setState(() => _telefonos.removeAt(i)),
               ),
             ),
     );

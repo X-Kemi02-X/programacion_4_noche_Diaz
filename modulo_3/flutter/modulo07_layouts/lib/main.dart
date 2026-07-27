@@ -3,7 +3,7 @@ import 'widgets/tarjeta_log.dart';
 import 'widgets/fila_estado.dart';
 import 'widgets/avatar_badge.dart';
 
-const int paso = 1;
+const int paso = 5;
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,
@@ -12,17 +12,17 @@ void main() => runApp(MaterialApp(
     2 => Scaffold(
           body: ListView(
             children: [
-              TarjetaLog(nivel: 'ERROR', componente: 'auth-service',
-                  mensaje:   'Token expirado — usuario forzado a re-login',
+              TarjetaLog(nivel: 'VENTA', componente: 'Galaxy S25',
+                  mensaje:   'Samsung Galaxy S25 vendido - \$899.99',
                   timestamp: DateTime.now()),
-              TarjetaLog(nivel: 'WARN',  componente: 'db-pool',
-                  mensaje:   'Conexiones disponibles: 2 / 10',
+              TarjetaLog(nivel: 'STOCK', componente: 'iPhone 16',
+                  mensaje:   'Stock agotado - reabastecer',
                   timestamp: DateTime.now().subtract(const Duration(minutes: 2))),
-              TarjetaLog(nivel: 'INFO',  componente: 'scheduler',
-                  mensaje:   'Tarea de backup completada',
+              TarjetaLog(nivel: 'INFO',  componente: 'Redmi Note 13',
+                  mensaje:   'Nuevo lote recibido - 20 unidades',
                   timestamp: DateTime.now().subtract(const Duration(minutes: 5))),
-              TarjetaLog(nivel: 'DEBUG', componente: 'http-client',
-                  mensaje:   'GET /api/status → 200 OK (38ms)',
+              TarjetaLog(nivel: 'DEBUG', componente: 'Motorola Edge',
+                  mensaje:   'Precio actualizado: \$449.99',
                   timestamp: DateTime.now().subtract(const Duration(minutes: 8))),
             ],
           ),
@@ -30,14 +30,13 @@ void main() => runApp(MaterialApp(
     3 => const Scaffold(
           body: Column(
             children: [
-              FilaEstado(nombre: 'nginx-proxy',   detalle: '10.0.0.5 · 45ms',          activo: true),
+              FilaEstado(nombre: 'Samsung Galaxy', detalle: 'Stock: 15 · \$899.99',         activo: true),
               Divider(height: 1),
-              FilaEstado(nombre: 'db-primary',    detalle: '10.0.0.12 · 8ms',           activo: true),
+              FilaEstado(nombre: 'iPhone 16',      detalle: 'Stock: 0 · Agotado',           activo: false),
               Divider(height: 1),
-              FilaEstado(nombre: 'backup-worker', detalle: '10.0.0.30 · sin respuesta', activo: false),
+              FilaEstado(nombre: 'Redmi Note 13',  detalle: 'Stock: 8 · \$299.99',          activo: true),
               Divider(height: 1),
-              FilaEstado(nombre: 'api-gateway-produccion-region-us-east',
-                         detalle: '10.0.0.8 · 12ms', activo: true),
+              FilaEstado(nombre: 'Edge 50 Pro',    detalle: 'Stock: 5 · \$449.99',          activo: true),
             ],
           ),
         ),
@@ -46,13 +45,13 @@ void main() => runApp(MaterialApp(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                AvatarBadge(nombre: 'web-01', alertas: 2,  activo: true),
+                AvatarBadge(nombre: 'Samsung', alertas: 2,  activo: true),
                 SizedBox(width: 24),
-                AvatarBadge(nombre: 'db-01',  alertas: 0,  activo: true),
+                AvatarBadge(nombre: 'Apple',   alertas: 0,  activo: true),
                 SizedBox(width: 24),
-                AvatarBadge(nombre: 'worker', alertas: 0,  activo: false),
+                AvatarBadge(nombre: 'Xiaomi',  alertas: 0,  activo: false),
                 SizedBox(width: 24),
-                AvatarBadge(nombre: 'cache',  alertas: 11, activo: true),
+                AvatarBadge(nombre: 'Motorola', alertas: 1, activo: true),
               ],
             ),
           ),
@@ -63,9 +62,9 @@ void main() => runApp(MaterialApp(
             children: [
               const Text('SizedBox', style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
-              const Text('Primer elemento'),
+              const Text('Primer teléfono'),
               const SizedBox(height: 32),
-              const Text('Segundo elemento (después de 32px)'),
+              const Text('Segundo teléfono (después de 32px)'),
               const Divider(height: 32),
               const Text('Padding', style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
@@ -88,7 +87,7 @@ void main() => runApp(MaterialApp(
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8, runSpacing: 8,
-                children: ['nginx', 'TLS 1.3', 'HTTP/2', 'IPv6', 'Load Balancer', 'CDN', 'WAF']
+                children: ['Samsung', 'Apple', 'Xiaomi', '5G', 'OLED', '128GB', 'Dual SIM']
                     .map((t) => Chip(label: Text(t)))
                     .toList(),
               ),
@@ -117,7 +116,7 @@ Widget _paso1() => Scaffold(
           ),
         ],
       ),
-      child: const Text('Servidor web-01',
+      child: const Text('Galaxy S25',
           style: TextStyle(fontWeight: FontWeight.bold)),
     ),
   ),

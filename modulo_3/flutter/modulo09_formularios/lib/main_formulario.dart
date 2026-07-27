@@ -1,10 +1,9 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
 
-void main() => runApp(const AppGestorSSH());
+void main() => runApp(const AppTiendaMovil());
 
-class AppGestorSSH extends StatelessWidget {
-  const AppGestorSSH({super.key});
+class AppTiendaMovil extends StatelessWidget {
+  const AppTiendaMovil({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,38 +11,40 @@ class AppGestorSSH extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF1B5E20), // verde oscuro
+          seedColor: const Color(0xFF1565C0),
         ),
         useMaterial3: true,
       ),
-      home: const _ConexionSSH(),
+      home: const _PantallaTelefono(),
     );
   }
 }
 
-class _ConexionSSH extends StatefulWidget {
-  const _ConexionSSH();
+class _PantallaTelefono extends StatefulWidget {
+  const _PantallaTelefono();
   @override
-  State<_ConexionSSH> createState() => _ConexionSSHState();
+  State<_PantallaTelefono> createState() => _PantallaTelefonoState();
 }
 
-class _ConexionSSHState extends State<_ConexionSSH> {
-  // Controller da acceso al texto, posición y selección del campo
-  final _ctrlHostname = TextEditingController();
-  final _ctrlIp       = TextEditingController();
-  final _ctrlPuerto   = TextEditingController(text: '22'); // valor inicial
+class _PantallaTelefonoState extends State<_PantallaTelefono> {
+  final _ctrlModelo = TextEditingController();
+  final _ctrlMarca  = TextEditingController();
+  final _ctrlPrecio = TextEditingController();
+  final _ctrlStock  = TextEditingController(text: '10');
 
-  final _focusIp     = FocusNode();
-  final _focusPuerto = FocusNode();
+  final _focusMarca  = FocusNode();
+  final _focusPrecio = FocusNode();
+  final _focusStock  = FocusNode();
 
   @override
   void dispose() {
-    // SIEMPRE liberar controllers y FocusNodes en dispose
-    _ctrlHostname.dispose();
-    _ctrlIp.dispose();
-    _ctrlPuerto.dispose();
-    _focusIp.dispose();
-    _focusPuerto.dispose();
+    _ctrlModelo.dispose();
+    _ctrlMarca.dispose();
+    _ctrlPrecio.dispose();
+    _ctrlStock.dispose();
+    _focusMarca.dispose();
+    _focusPrecio.dispose();
+    _focusStock.dispose();
     super.dispose();
   }
 
@@ -53,7 +54,7 @@ class _ConexionSSHState extends State<_ConexionSSH> {
 
     return Scaffold(
       appBar: AppBar(
-        title:           const Text('Conexión SSH'),
+        title:           const Text('Registrar Teléfono'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
       ),
@@ -63,37 +64,49 @@ class _ConexionSSHState extends State<_ConexionSSH> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
-              controller:      _ctrlHostname,
+              controller:      _ctrlModelo,
               decoration:      const InputDecoration(
-                labelText:  'Hostname',
-                hintText:   'prod-web-01',
-                prefixIcon: Icon(Icons.dns),
+                labelText:  'Modelo',
+                hintText:   'Galaxy S25',
+                prefixIcon: Icon(Icons.phone_android),
                 border:     OutlineInputBorder(),
               ),
-              textInputAction: TextInputAction.next,              // tecla "Siguiente"
-              onSubmitted:     (_) => _focusIp.requestFocus(),   // salta a IP
+              textInputAction: TextInputAction.next,
+              onSubmitted:     (_) => _focusMarca.requestFocus(),
             ),
             const SizedBox(height: 12),
             TextField(
-              controller:      _ctrlIp,
-              focusNode:       _focusIp,
+              controller:      _ctrlMarca,
+              focusNode:       _focusMarca,
               decoration:      const InputDecoration(
-                labelText:  'Dirección IP',
-                hintText:   '192.168.1.100',
-                prefixIcon: Icon(Icons.router),
+                labelText:  'Marca',
+                hintText:   'Samsung',
+                prefixIcon: Icon(Icons.badge),
+                border:     OutlineInputBorder(),
+              ),
+              textInputAction: TextInputAction.next,
+              onSubmitted:     (_) => _focusPrecio.requestFocus(),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller:      _ctrlPrecio,
+              focusNode:       _focusPrecio,
+              decoration:      const InputDecoration(
+                labelText:  'Precio',
+                prefixIcon: Icon(Icons.attach_money),
                 border:     OutlineInputBorder(),
               ),
               keyboardType:    TextInputType.number,
               textInputAction: TextInputAction.next,
-              onSubmitted:     (_) => _focusPuerto.requestFocus(),
+              onSubmitted:     (_) => _focusStock.requestFocus(),
             ),
             const SizedBox(height: 12),
             TextField(
-              controller:      _ctrlPuerto,
-              focusNode:       _focusPuerto,
+              controller:      _ctrlStock,
+              focusNode:       _focusStock,
               decoration:      const InputDecoration(
-                labelText:  'Puerto SSH',
-                prefixIcon: Icon(Icons.lock_outline),
+                labelText:  'Stock inicial',
+                prefixIcon: Icon(Icons.inventory),
                 border:     OutlineInputBorder(),
               ),
               keyboardType:    TextInputType.number,
@@ -107,22 +120,22 @@ class _ConexionSSHState extends State<_ConexionSSH> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      'Conectando a ${_ctrlHostname.text} '
-                      '(${_ctrlIp.text}:${_ctrlPuerto.text})',
+                      '${_ctrlModelo.text} (${_ctrlMarca.text}) registrado',
                     ),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
               },
-              icon:  const Icon(Icons.terminal),
-              label: const Text('Conectar'),
+              icon:  const Icon(Icons.save),
+              label: const Text('Guardar teléfono'),
             ),
             const SizedBox(height: 8),
             OutlinedButton(
               onPressed: () {
-                _ctrlHostname.clear();
-                _ctrlIp.clear();
-                _ctrlPuerto.text = '22'; // restablecer valor por defecto
+                _ctrlModelo.clear();
+                _ctrlMarca.clear();
+                _ctrlPrecio.clear();
+                _ctrlStock.text = '10';
               },
               child: const Text('Limpiar campos'),
             ),

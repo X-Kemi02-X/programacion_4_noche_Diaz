@@ -1,15 +1,14 @@
-// lib/widgets/tarjeta_servidor_grid.dart
 import 'package:flutter/material.dart';
-import '../models/servidor_ssh.dart';
+import '../models/telefono.dart';
 
-class TarjetaServidorGrid extends StatelessWidget {
-  final ServidorSSH  servidor;
+class TarjetaTelefonoGrid extends StatelessWidget {
+  final Telefono    telefono;
   final VoidCallback onFavorito;
   final VoidCallback onEliminar;
 
-  const TarjetaServidorGrid({
+  const TarjetaTelefonoGrid({
     super.key,
-    required this.servidor,
+    required this.telefono,
     required this.onFavorito,
     required this.onEliminar,
   });
@@ -25,49 +24,43 @@ class TarjetaServidorGrid extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Fila superior: icono + favorito
             Row(children: [
               Icon(
-                Icons.dns,
-                color: servidor.ssl ? cs.primary : cs.outline,
+                Icons.phone_android,
+                color: telefono.disponible ? cs.primary : cs.outline,
                 size: 18,
               ),
               const Spacer(),
               GestureDetector(
                 onTap: onFavorito,
                 child: Icon(
-                  servidor.favorito ? Icons.star : Icons.star_border,
-                  color: servidor.favorito ? Colors.amber : cs.outline,
+                  telefono.favorito ? Icons.star : Icons.star_border,
+                  color: telefono.favorito ? Colors.amber : cs.outline,
                   size: 18,
                 ),
               ),
             ]),
             const SizedBox(height: 6),
-
-            // Nombre e IP
             Text(
-              servidor.nombre,
+              telefono.modelo,
               style: text.titleSmall?.copyWith(fontWeight: FontWeight.bold),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
             Text(
-              servidor.ip,
+              '${telefono.marca} - \$${telefono.precio.toStringAsFixed(2)}',
               style: text.bodySmall?.copyWith(color: cs.onSurfaceVariant),
             ),
-
             const Spacer(),
-
-            // Fila inferior: SSL + SO + eliminar
             Row(children: [
-              if (servidor.ssl)
+              if (telefono.disponible)
                 Padding(
                   padding: const EdgeInsets.only(right: 4),
-                  child: Icon(Icons.lock, size: 12, color: cs.primary),
+                  child: Icon(Icons.check_circle, size: 12, color: Colors.green),
                 ),
               Expanded(
                 child: Text(
-                  servidor.so,
+                  'Stock: ${telefono.stock}',
                   style: text.labelSmall?.copyWith(color: cs.onSurfaceVariant),
                   overflow: TextOverflow.ellipsis,
                 ),

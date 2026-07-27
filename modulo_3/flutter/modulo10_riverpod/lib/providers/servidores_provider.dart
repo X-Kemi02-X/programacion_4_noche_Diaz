@@ -1,56 +1,48 @@
-// lib/providers/servidores_provider.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
-import '../models/servidor_ssh.dart';
+import '../models/telefono.dart';
 
-// NotifierProvider — estado complejo con métodos propios
-class ServidoresNotifier extends Notifier<List<ServidorSSH>> {
+class TelefonosNotifier extends Notifier<List<Telefono>> {
   @override
-  List<ServidorSSH> build() => [
-    ServidorSSH(id:'1', nombre:'prod-web-01', ip:'10.0.2.10', puerto:22,   ssl:true,  favorito:true),
-    ServidorSSH(id:'2', nombre:'prod-db-01',  ip:'10.0.2.20', puerto:22,   ssl:true),
-    ServidorSSH(id:'3', nombre:'staging-api', ip:'10.0.3.10', puerto:2222, ssl:false),
+  List<Telefono> build() => [
+    Telefono(id:'1', modelo:'Galaxy S25',    marca:'Samsung',  precio:899.99,  stock:15, color:'Negro',  favorito:true),
+    Telefono(id:'2', modelo:'iPhone 16',      marca:'Apple',    precio:999.99,  stock:0,  color:'Blanco', disponible: false),
+    Telefono(id:'3', modelo:'Redmi Note 13',  marca:'Xiaomi',   precio:299.99,  stock:8,  color:'Azul'),
   ];
 
   void toggleFavorito(String id) {
-    state = state.map((s) =>
-        s.id == id
-          ? ServidorSSH(id:s.id, nombre:s.nombre, ip:s.ip,
-                        puerto:s.puerto, ssl:s.ssl,
-                        favorito:!s.favorito)
-          : s
+    state = state.map((t) =>
+        t.id == id
+          ? Telefono(id:t.id, modelo:t.modelo, marca:t.marca,
+                     precio:t.precio, stock:t.stock, color:t.color,
+                     disponible:t.disponible, favorito:!t.favorito)
+          : t
     ).toList();
   }
 
   void eliminar(String id) {
-    state = state.where((s) => s.id != id).toList();
+    state = state.where((t) => t.id != id).toList();
   }
 
-  void agregar(ServidorSSH servidor) {
-    state = [...state, servidor];
+  void agregar(Telefono telefono) {
+    state = [...state, telefono];
   }
 }
 
-final servidoresProvider =
-    NotifierProvider<ServidoresNotifier, List<ServidorSSH>>(
-  ServidoresNotifier.new,
+final telefonosProvider =
+    NotifierProvider<TelefonosNotifier, List<Telefono>>(
+  TelefonosNotifier.new,
 );
 
-
-// Filtro de búsqueda — estado primitivo
 final busquedaProvider = StateProvider<String>((ref) => '');
 
-// Provider DERIVADO — se recalcula cuando cualquiera de sus dependencias cambia
-final servidoresFiltradosProvider = Provider<List<ServidorSSH>>((ref) {
-  final todos    = ref.watch(servidoresProvider);
+final telefonosFiltradosProvider = Provider<List<Telefono>>((ref) {
+  final todos    = ref.watch(telefonosProvider);
   final busqueda = ref.watch(busquedaProvider);
 
   if (busqueda.isEmpty) return todos;
 
   final q = busqueda.toLowerCase();
-  return todos.where((s) =>
-      s.nombre.toLowerCase().contains(q) || s.ip.contains(q)
+  return todos.where((t) =>
+      t.modelo.toLowerCase().contains(q) || t.marca.toLowerCase().contains(q)
   ).toList();
-  // Cuando 'servidoresProvider' o 'busquedaProvider' cambian,
-  // este provider se recalcula automáticamente.
 });

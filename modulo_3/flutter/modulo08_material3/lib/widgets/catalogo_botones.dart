@@ -52,20 +52,20 @@ class CatalogoBotones extends StatelessWidget {
           const SizedBox(height: 12),
           FilledButton.icon(
             onPressed: () {},
-            icon:  const Icon(Icons.send),
-            label: const Text('Enviar reporte'),
+            icon:  const Icon(Icons.shopping_cart),
+            label: const Text('Agregar al carrito'),
           ),
           const SizedBox(height: 8),
           OutlinedButton.icon(
             onPressed: () {},
             icon:  const Icon(Icons.download),
-            label: const Text('Exportar logs'),
+            label: const Text('Descargar ficha'),
           ),
           const SizedBox(height: 8),
           TextButton.icon(
             onPressed: () {},
             icon:  const Icon(Icons.open_in_new),
-            label: const Text('Ver documentación'),
+            label: const Text('Ver detalles'),
           ),
 
           const Divider(height: 32),
@@ -85,7 +85,7 @@ class CatalogoBotones extends StatelessWidget {
               minimumSize:     const Size(double.infinity, 48),
             ),
             onPressed: () {},
-            child: const Text('Eliminar servidor — con cs.error'),
+              child: const Text('Eliminar — con cs.error'),
           ),
           const SizedBox(height: 8),
           FilledButton(
@@ -95,7 +95,7 @@ class CatalogoBotones extends StatelessWidget {
               minimumSize:     const Size(double.infinity, 48),
             ),
             onPressed: () {},
-            child: const Text('Eliminar servidor — con cs.errorContainer'),
+            child: const Text('Eliminar — con cs.errorContainer'),
           ),
           const SizedBox(height: 16),
           Row(children: [

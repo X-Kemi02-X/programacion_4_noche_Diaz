@@ -1,52 +1,43 @@
-// lib/screens/pantalla_detalle.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../models/servidor_ssh.dart';
 
 class PantallaDetalle extends StatelessWidget {
-  final String      id;
-  final ServidorSSH? servidor; // puede venir por extras
+  final String    id;
+  final Telefono? telefono;
 
-  const PantallaDetalle({super.key, required this.id, this.servidor});
+  const PantallaDetalle({super.key, required this.id, this.telefono});
 
   @override
   Widget build(BuildContext context) {
-    // Si no viene por extras, buscar en la lista simulada
-    final srv = servidor ??
-        servidoresSimulados.where((s) => s.id == id).firstOrNull;
+    final tel = telefono ??
+        telefonosSimulados.where((t) => t.id == id).firstOrNull;
 
     final cs = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
-        title:           Text('Detalle: ${srv?.nombre ?? id}'),
+        title:           Text('Detalle: ${tel?.modelo ?? id}'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
       ),
-      body: srv == null
-          ? Center(child: Text('Servidor $id no encontrado'))
+      body: tel == null
+          ? Center(child: Text('Teléfono $id no encontrado'))
           : Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _Fila('ID',       srv.id),
-                  _Fila('Nombre',   srv.nombre),
-                  _Fila('IP',       srv.ip),
-                  _Fila('Puerto',   srv.puerto.toString()),
-                  _Fila('SSL',      srv.ssl ? 'Activo' : 'Inactivo'),
+                  _Fila('ID',     tel.id),
+                  _Fila('Modelo', tel.modelo),
+                  _Fila('Marca',  tel.marca),
+                  _Fila('Precio', '\$${tel.precio.toStringAsFixed(2)}'),
                   const SizedBox(height: 24),
                   Row(children: [
                     OutlinedButton.icon(
                       onPressed: () => context.pop(),
                       icon:  const Icon(Icons.arrow_back),
                       label: const Text('Volver'),
-                    ),
-                    const SizedBox(width: 12),
-                    FilledButton.icon(
-                      onPressed: () => context.push('/servidores/${srv.id}/logs'),
-                      icon:  const Icon(Icons.list_alt),
-                      label: const Text('Ver logs'),
                     ),
                   ]),
                 ],

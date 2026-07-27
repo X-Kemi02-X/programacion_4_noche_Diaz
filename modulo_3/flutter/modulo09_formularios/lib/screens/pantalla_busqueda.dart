@@ -1,8 +1,8 @@
-// lib/screens/pantalla_busqueda.dart
 import 'package:flutter/material.dart';
 import 'package:modulo09_formularios/widgets/tarjetaservidorgrid.dart';
-import '../models/servidor_ssh.dart';
+import '../models/telefono.dart';
 import '../widgets/fila_servidor.dart';
+
 class PantallaBusqueda extends StatefulWidget {
   const PantallaBusqueda({super.key});
   @override
@@ -10,38 +10,36 @@ class PantallaBusqueda extends StatefulWidget {
 }
 
 class _PantallaBusquedaState extends State<PantallaBusqueda> {
-  final _servidores = [
-    ServidorSSH(id:'1', nombre:'prod-web-01',  ip:'10.0.2.10',   puerto:22,   usuario:'deploy',   so:'Ubuntu 24.04', ssl:true,  favorito:true),
-    ServidorSSH(id:'2', nombre:'prod-db-01',   ip:'10.0.2.20',   puerto:22,   usuario:'postgres', so:'Debian 12',    ssl:true),
-    ServidorSSH(id:'3', nombre:'staging-api',  ip:'10.0.3.10',   puerto:2222, usuario:'ubuntu',   so:'Ubuntu 24.04', ssl:false),
-    ServidorSSH(id:'4', nombre:'dev-sandbox',  ip:'192.168.1.5', puerto:22,   usuario:'vagrant',  so:'Alpine Linux', ssl:false),
+  final _telefonos = [
+    Telefono(id:'1', modelo:'Galaxy S25',      marca:'Samsung',  precio:899.99,  stock:15, color:'Negro',    sistema:'Android', favorito:true),
+    Telefono(id:'2', modelo:'iPhone 16',        marca:'Apple',    precio:999.99,  stock:0,  color:'Blanco',   sistema:'iOS',     disponible: false),
+    Telefono(id:'3', modelo:'Redmi Note 13',    marca:'Xiaomi',   precio:299.99,  stock:8,  color:'Azul',     sistema:'Android'),
+    Telefono(id:'4', modelo:'Edge 50 Pro',      marca:'Motorola', precio:449.99,  stock:5,  color:'Gris',     sistema:'Android'),
   ];
 
-  String _busqueda = '';     // texto actual de la búsqueda
+  String _busqueda = '';
   bool   _modoGrid = false;
 
-  // Getter calculado — filtra sin modificar _servidores
-  List<ServidorSSH> get _filtrados => _servidores
-      .where((s) =>
-          s.nombre.toLowerCase().contains(_busqueda.toLowerCase()) ||
-          s.ip.contains(_busqueda) ||
-          s.usuario.toLowerCase().contains(_busqueda.toLowerCase()))
+  List<Telefono> get _filtrados => _telefonos
+      .where((t) =>
+          t.modelo.toLowerCase().contains(_busqueda.toLowerCase()) ||
+          t.marca.toLowerCase().contains(_busqueda.toLowerCase()))
       .toList();
 
-  void _toggleFavorito(ServidorSSH s) =>
-      setState(() => s.favorito = !s.favorito);
+  void _toggleFavorito(Telefono t) =>
+      setState(() => t.favorito = !t.favorito);
 
-  void _eliminar(ServidorSSH s) =>
-      setState(() => _servidores.removeWhere((x) => x.id == s.id));
+  void _eliminar(Telefono t) =>
+      setState(() => _telefonos.removeWhere((x) => x.id == t.id));
 
   @override
   Widget build(BuildContext context) {
     final cs       = Theme.of(context).colorScheme;
-    final filtrados = _filtrados;   // evalúa el getter una sola vez
+    final filtrados = _filtrados;
 
     return Scaffold(
       appBar: AppBar(
-        title:           Text('Servidores (${_servidores.length})'),
+        title:           Text('Teléfonos (${_telefonos.length})'),
         backgroundColor: cs.primaryContainer,
         foregroundColor: cs.onPrimaryContainer,
         actions: [
@@ -54,11 +52,10 @@ class _PantallaBusquedaState extends State<PantallaBusqueda> {
       ),
       body: Column(
         children: [
-          // ── SearchBar ─────────────────────────────────────────────
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
             child: SearchBar(
-              hintText: 'Buscar por nombre, IP o usuario...',
+              hintText: 'Buscar por modelo o marca...',
               leading:  const Icon(Icons.search),
               trailing: _busqueda.isNotEmpty
                   ? [
@@ -74,8 +71,6 @@ class _PantallaBusquedaState extends State<PantallaBusqueda> {
               ),
             ),
           ),
-
-          // ── Contador de resultados ────────────────────────────────
           if (_busqueda.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(left: 16, bottom: 4),
@@ -89,8 +84,6 @@ class _PantallaBusquedaState extends State<PantallaBusqueda> {
                 ),
               ),
             ),
-
-          // ── Lista o Grid ──────────────────────────────────────────
           Expanded(
             child: filtrados.isEmpty
                 ? Center(
@@ -123,8 +116,8 @@ class _PantallaBusquedaState extends State<PantallaBusqueda> {
                           mainAxisSpacing:  8,
                         ),
                         itemCount:   filtrados.length,
-                        itemBuilder: (ctx, i) => TarjetaServidorGrid(
-                          servidor:   filtrados[i],
+                        itemBuilder: (ctx, i) => TarjetaTelefonoGrid(
+                          telefono:   filtrados[i],
                           onFavorito: () => _toggleFavorito(filtrados[i]),
                           onEliminar: () => _eliminar(filtrados[i]),
                         ),
@@ -133,8 +126,8 @@ class _PantallaBusquedaState extends State<PantallaBusqueda> {
                         itemCount:        filtrados.length,
                         separatorBuilder: (_, _) =>
                             const Divider(height: 1, indent: 72),
-                        itemBuilder: (ctx, i) => FilaServidor(
-                          servidor:   filtrados[i],
+                        itemBuilder: (ctx, i) => FilaTelefono(
+                          telefono:   filtrados[i],
                           onFavorito: () => _toggleFavorito(filtrados[i]),
                           onEliminar: () => _eliminar(filtrados[i]),
                         ),

@@ -1,4 +1,3 @@
-// lib/router/app_router_paso2.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../screens/pantalla_inicio.dart';
@@ -16,25 +15,23 @@ final appRouterPaso2 = GoRouter(
     ),
     GoRoute(
       path:    '/servidores',
-      builder: (context, state) => const PantallaServidores(),
+      builder: (context, state) => const PantallaTelefonos(),
       routes: [
-        // Ruta hija: /servidores/:id
         GoRoute(
-          path:    ':id',   // relativa — ruta completa: /servidores/:id
+          path:    ':id',
           builder: (context, state) {
-            final id       = state.pathParameters['id']!;
-            final servidor = state.extra as ServidorSSH?;
-            return PantallaDetalle(id: id, servidor: servidor);
+            final id     = state.pathParameters['id']!;
+            final tel    = state.extra as Telefono?;
+            return PantallaDetalle(id: id, telefono: tel);
           },
         ),
-        // Ruta hija: /servidores/:id/logs
         GoRoute(
           path:    ':id/logs',
           builder: (context, state) {
             final id = state.pathParameters['id']!;
             return Scaffold(
-              appBar: AppBar(title: Text('Logs de $id')),
-              body:   Center(child: Text('Logs del servidor $id')),
+              appBar: AppBar(title: Text('Info de $id')),
+              body:   Center(child: Text('Detalles del teléfono $id')),
             );
           },
         ),

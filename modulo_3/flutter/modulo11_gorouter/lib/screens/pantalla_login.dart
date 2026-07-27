@@ -37,9 +37,9 @@ class _PantallaLoginState extends ConsumerState<PantallaLogin> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.terminal, size: 64, color: cs.primary),
+                Icon(Icons.phone_android, size: 64, color: cs.primary),
                 const SizedBox(height: 16),
-                const Text('Monitor SSH',
+                const Text('Tienda Móvil',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 32),
 

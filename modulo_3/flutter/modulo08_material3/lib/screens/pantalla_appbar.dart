@@ -20,7 +20,7 @@ class _PantallaAppBarState extends State<PantallaAppBar> {
       body: CustomScrollView(
         slivers: [
           (_useMedium ? SliverAppBar.medium : SliverAppBar.large)(
-            title:           const Text('Servidores'),
+            title:           const Text('Catálogo'),
             pinned:          _pinned,
             backgroundColor: _useTertiary ? cs.tertiaryContainer : cs.primaryContainer,
             foregroundColor: _useTertiary ? cs.onTertiaryContainer : cs.onPrimaryContainer,
@@ -43,10 +43,10 @@ class _PantallaAppBarState extends State<PantallaAppBar> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 56),
-                    Icon(Icons.dns, size: 48, color: _useTertiary ? cs.onTertiaryContainer : cs.onPrimaryContainer),
+                    Icon(Icons.phone_android, size: 48, color: _useTertiary ? cs.onTertiaryContainer : cs.onPrimaryContainer),
                     const SizedBox(height: 8),
                     Text(
-                      '8 servidores activos',
+                      '12 teléfonos disponibles',
                       style: TextStyle(color: _useTertiary ? cs.onTertiaryContainer : cs.onPrimaryContainer),
                     ),
                   ],
@@ -99,9 +99,9 @@ class _PantallaAppBarState extends State<PantallaAppBar> {
               delegate: SliverChildBuilderDelegate(
                 (context, i) => Card(
                   child: ListTile(
-                    leading:  Icon(Icons.dns, color: cs.primary),
-                    title:    Text('prod-web-0${i + 1}'),
-                    subtitle: Text('10.0.2.${i + 10} · Activo'),
+                    leading:  Icon(Icons.phone_android, color: cs.primary),
+                    title:    Text('Modelo ${i + 1}'),
+                    subtitle: Text('Marca: Samsung · \$899'),
                     trailing: Chip(
                       label:           const Text('OK'),
                       backgroundColor: cs.primaryContainer,

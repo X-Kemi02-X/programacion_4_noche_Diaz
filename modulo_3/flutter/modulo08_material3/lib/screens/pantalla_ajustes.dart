@@ -100,28 +100,28 @@ class PantallaAjustes extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('prod-web-01',
+                        Text('Galaxy S25',
                             style: text.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold)),
-                        Text('10.0.2.10 · Ubuntu 24.04',
+                        Text('Samsung · \$899.99',
                             style: text.bodySmall?.copyWith(
                                 color: cs.onSurfaceVariant)),
                         const SizedBox(height: 12),
                         Row(children: [
                           FilledButton.icon(
                             onPressed: () {},
-                            icon:  const Icon(Icons.terminal, size: 16),
-                            label: const Text('SSH'),
+                            icon:  const Icon(Icons.shopping_cart, size: 16),
+                            label: const Text('Comprar'),
                           ),
                           const SizedBox(width: 8),
                           OutlinedButton(
                             onPressed: () {},
-                            child: const Text('Métricas'),
+                            child: const Text('Detalles'),
                           ),
                           const SizedBox(width: 8),
                           TextButton(
                             onPressed: () {},
-                            child: const Text('Logs'),
+                            child: const Text('Ficha'),
                           ),
                         ]),
                       ],

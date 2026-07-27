@@ -17,8 +17,8 @@ class TarjetaLog extends StatelessWidget {
   Color get _colorNivel => switch (nivel) {
     'DEBUG' => Colors.grey,
     'INFO'  => Colors.blue,
-    'WARN'  => Colors.orange,
-    'ERROR' => Colors.red,
+    'STOCK' => Colors.orange,
+    'VENTA' => Colors.green,
     _       => Colors.grey,
   };
 
