@@ -23,20 +23,20 @@ class MainActivity : ComponentActivity() {
                 // S04_LayoutScreen()
                 // S05_ModifierScreen()
                 // S06_EstadoScreen()
-                //S07_StateHoistingScreen()
-                // S08_BienvenidaScreen()
+                // S07_StateHoistingScreen()
+                S08_BienvenidaScreen()
 
-                // Componentes Material 3: TextField, Card, LazyColumn, Scaffold y diálogos
+                // Componentes Material 3: tienda de móviles
                 // ◀ CAMBIA AQUÍ para probar cada paso:
                 // Paso01_TextFieldScreen()
                 // Paso01_SumaScreen()
                 // Paso01AreaTriangulo()
-                //Paso01CompraProducto()
-                + Paso02_CardScreen()
+                // Paso01CompraProducto()
+                // Paso02_CardScreen()
                 // Paso03_LazyColumnScreen()
                 // Paso04_ScaffoldScreen()
                 // Paso05_NavBarScreen()
-                // Paso06_DialogosScreen()   // ← paso activo
+                // Paso06_DialogosScreen()
 
                 // Paso01_ViewModelScreen()
                 // Paso02_UiStateScreen()

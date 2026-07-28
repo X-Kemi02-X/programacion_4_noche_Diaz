@@ -1,7 +1,7 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'screens/pantalla_servidores.dart';
+import 'screens/pantalla_telefonos.dart';
 import 'screens/pantalla_busqueda.dart';
 
 const int paso = 3;

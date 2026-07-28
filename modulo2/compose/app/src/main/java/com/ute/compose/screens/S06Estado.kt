@@ -72,10 +72,10 @@ private fun DemoEstadoDerivado() {
     // No usa remember ni mutableStateOf propio
     val porcentaje = nivel.toFloat() / max
     val etiquetaNivel = when {
-        nivel == 0    -> "Sin nivel"
-        nivel <= 2    -> "Principiante"
-        nivel <= 4    -> "Intermedio"
-        else          -> "Avanzado"
+        nivel == 0    -> "Sin categoría"
+        nivel <= 2    -> "Gama Básica"
+        nivel <= 4    -> "Gama Media"
+        else          -> "Gama Alta"
     }
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -99,12 +99,12 @@ private fun DemoEstadoDerivado() {
             OutlinedButton(
                 onClick  = { if (nivel > 0) nivel-- },
                 enabled  = nivel > 0
-            ) { Text("Bajar nivel") }
+            ) { Text("Bajar gama") }
 
             Button(
                 onClick  = { if (nivel < max) nivel++ },
                 enabled  = nivel < max
-            ) { Text("Subir nivel") }
+            ) { Text("Subir gama") }
         }
 
         Text(

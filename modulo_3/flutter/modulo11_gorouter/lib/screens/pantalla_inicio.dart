@@ -27,7 +27,7 @@ class PantallaInicio extends StatelessWidget {
                 style: TextStyle(color: cs.onSurfaceVariant)),
             const SizedBox(height: 32),
             FilledButton.icon(
-              onPressed: () => context.go('/servidores'),
+              onPressed: () => context.go('/telefonos'),
               icon:  const Icon(Icons.shopping_cart),
               label: const Text('Ver catálogo'),
             ),

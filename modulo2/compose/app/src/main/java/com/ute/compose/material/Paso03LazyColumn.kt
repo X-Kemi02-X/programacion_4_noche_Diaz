@@ -18,17 +18,14 @@ import com.ute.compose.model.contactosDeMuestra
 
 @Composable
 fun Paso03_LazyColumnScreen() {
-    // Estado mutable de la lista — usamos mutableStateOf con una lista
-    // Al reasignar la lista, Compose detecta el cambio y recompone
-    var contactos by remember { mutableStateOf(contactosDeMuestra) }
+    var productos by remember { mutableStateOf(contactosDeMuestra) }
     var busqueda  by remember { mutableStateOf("") }
     var filtro    by remember { mutableStateOf("Todos") }
 
-    // Derivamos la lista filtrada — se recalcula en cada recomposición
-    val contactosFiltrados = contactos
+    val productosFiltrados = productos
         .filter { c ->
             when (filtro) {
-                "Favoritos" -> c.favorito
+                "Destacados" -> c.favorito
                 else        -> true
             }
         }
@@ -45,11 +42,10 @@ fun Paso03_LazyColumnScreen() {
             modifier = Modifier.padding(16.dp)
         )
 
-        // ── Campo de búsqueda (del Paso 1) ───────────────────────────────
         OutlinedTextField(
             value         = busqueda,
             onValueChange = { busqueda = it },
-            placeholder   = { Text("Buscar...") },
+            placeholder   = { Text("Buscar teléfono...") },
             leadingIcon   = { Icon(Icons.Default.Search, contentDescription = null) },
             trailingIcon  = {
                 if (busqueda.isNotEmpty())
@@ -63,18 +59,15 @@ fun Paso03_LazyColumnScreen() {
 
         Spacer(Modifier.height(8.dp))
 
-        // ── LazyRow: filtros de categoría ────────────────────────────────
-        // LazyRow = Row virtualizado → ideal para chips horizontales con scroll
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding        = PaddingValues(horizontal = 16.dp)
         ) {
-            items(listOf("Todos", "Favoritos")) { opcion ->
+            items(listOf("Todos", "Destacados")) { opcion ->
                 FilterChip(
                     selected = filtro == opcion,
                     onClick  = { filtro = opcion },
                     label    = { Text(opcion) },
-                    // leadingIcon cambia según si está seleccionado
                     leadingIcon = if (filtro == opcion) {{
                         Icon(Icons.Default.Check,
                             contentDescription = null,
@@ -86,9 +79,7 @@ fun Paso03_LazyColumnScreen() {
 
         Spacer(Modifier.height(8.dp))
 
-        // ── LazyColumn: lista principal ──────────────────────────────────
-        if (contactosFiltrados.isEmpty()) {
-            // Estado vacío — buena práctica siempre manejar lista vacía
+        if (productosFiltrados.isEmpty()) {
             Box(
                 modifier         = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -108,44 +99,34 @@ fun Paso03_LazyColumnScreen() {
             }
         } else {
             LazyColumn(
-                // contentPadding: espacio en los bordes de la lista
-                // No confundir con padding del Modifier — este respeta el scroll
                 contentPadding      = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // item { } → elemento único (cabecera, separador, etc.)
                 item {
                     Text(
-                        "${contactosFiltrados.size} contacto(s)",
+                        "${productosFiltrados.size} teléfono(s)",
                         style    = MaterialTheme.typography.labelSmall,
                         color    = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(bottom = 4.dp)
                     )
                 }
 
-                // items(lista, key) → renderiza un composable por cada elemento
-                // key = { it.id } → Compose identifica cada ítem por su id,
-                // no por su posición — crítico para animaciones y rendimiento
                 items(
-                    items = contactosFiltrados,
+                    items = productosFiltrados,
                     key   = { it.id }
-                ) { contacto ->
+                ) { producto ->
                     TarjetaContacto(
-                        contacto  = contacto,
-                        onLlamar  = { /* Paso 6: snackbar */ },
+                        contacto  = producto,
                         onFavorito = {
-                            // Creamos nueva lista con el favorito modificado
-                            // Las listas en Kotlin son inmutables por defecto —
-                            // reasignamos en lugar de mutar
-                            contactos = contactos.map { c ->
-                                if (c.id == contacto.id) c.copy(favorito = !c.favorito)
+                            productos = productos.map { c ->
+                                if (c.id == producto.id) c.copy(favorito = !c.favorito)
                                 else c
                             }
-                        }
+                        },
+                        onVerDetalle = { }
                     )
                 }
 
-                // item de pie — espacio para futura NavigationBar
                 item { Spacer(Modifier.height(16.dp)) }
             }
         }

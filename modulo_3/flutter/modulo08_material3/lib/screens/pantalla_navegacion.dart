@@ -31,7 +31,7 @@ class _PantallaNavegacionState extends State<PantallaNavegacion> {
         index: _indice,
         children: const [
           _PantallaDashboard(),
-          _PantallaServidores(),
+          _PantallaTelefonos(),
           _PantallaAlertas(),
           _PantallaAjustes(),
         ],
@@ -131,8 +131,8 @@ class _TarjetaMetrica extends StatelessWidget {
   }
 }
 
-class _PantallaServidores extends StatelessWidget {
-  const _PantallaServidores();
+class _PantallaTelefonos extends StatelessWidget {
+  const _PantallaTelefonos();
 
   @override
   Widget build(BuildContext context) {
@@ -168,9 +168,9 @@ class _PantallaAlertas extends StatelessWidget {
     final text = Theme.of(context).textTheme;
 
     const alertas = [
-      (servidor: 'Galaxy S25',  mensaje: 'Stock bajo (2 uds)', nivel: 'CRÍTICO'),
-      (servidor: 'iPhone 16',   mensaje: 'Agotado',            nivel: 'CRÍTICO'),
-      (servidor: 'Redmi Note',  mensaje: 'Precio desactualizado', nivel: 'AVISO'),
+      (producto: 'Galaxy S25',  mensaje: 'Stock bajo (2 uds)', nivel: 'CRÍTICO'),
+      (producto: 'iPhone 16',   mensaje: 'Agotado',            nivel: 'CRÍTICO'),
+      (producto: 'Redmi Note',  mensaje: 'Precio desactualizado', nivel: 'AVISO'),
     ];
 
     return ListView.builder(
@@ -187,14 +187,14 @@ class _PantallaAlertas extends StatelessWidget {
               esCritico ? Icons.error : Icons.warning,
               color: esCritico ? cs.onErrorContainer : cs.onTertiaryContainer,
             ),
-            title: Text(alerta.servidor,
+            title: Text(alerta.producto,
                 style: text.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
             subtitle: RichText(
               text: TextSpan(
                 style: DefaultTextStyle.of(context).style,
                 children: [
-                  TextSpan(
-                    text: '${alerta.servidor} ',
+                    TextSpan(
+                      text: '${alerta.producto} ',
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   TextSpan(

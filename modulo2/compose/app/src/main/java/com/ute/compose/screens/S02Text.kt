@@ -26,30 +26,30 @@ fun S02_TextScreen() {
         HorizontalDivider()
 
         EtiquetaSeccion("1. Texto básico")
-        Text("Texto simple sin propiedades adicionales")
+        Text("Teléfono Samsung Galaxy S25 disponible")
 
         EtiquetaSeccion("2. fontSize + fontWeight + fontStyle")
-        Text("Negrita 24sp",   fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        Text("Cursiva 18sp",   fontSize = 18.sp, fontStyle  = FontStyle.Italic)
-        Text("Light 20sp",     fontSize = 20.sp, fontWeight = FontWeight.Light)
+        Text("iPhone 16 Pro",     fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text("Samsung Galaxy S25", fontSize = 18.sp, fontStyle  = FontStyle.Italic)
+        Text("Xiaomi 14 Pro",     fontSize = 20.sp, fontWeight = FontWeight.Light)
 
         EtiquetaSeccion("3. Color y decoración")
-        Text("Texto en azul",
+        Text("Precio: $899",
             color = Color(0xFF1976D2))
-        Text("Subrayado",
+        Text("En stock",
             textDecoration = TextDecoration.Underline)
-        Text("Tachado",
+        Text("Agotado",
             textDecoration = TextDecoration.LineThrough,
             color          = MaterialTheme.colorScheme.onSurfaceVariant)
 
         EtiquetaSeccion("4. maxLines + TextOverflow")
         Text(
-            text     = "Este texto es muy largo y definitivamente no cabe en una sola línea del dispositivo móvil moderno",
+            text     = "El Samsung Galaxy S25 Ultra tiene una pantalla Dynamic AMOLED de 6.9 pulgadas con resolución QHD+ y tasa de refresco de 120Hz",
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
         Text(
-            text     = "Este texto está limitado a dos líneas y el resto se corta con puntos suspensivos al final del segundo renglón",
+            text     = "El iPhone 16 Pro Max incluye el chip A18 Pro con CPU de 6 núcleos y GPU de 6 núcleos, además de 8GB de RAM y almacenamiento de hasta 1TB",
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
@@ -63,12 +63,12 @@ fun S02_TextScreen() {
 
         EtiquetaSeccion("6. TextAlign")
         Text(
-            text      = "Texto centrado en todo el ancho disponible",
+            text      = "Oferta: 12 meses sin intereses",
             textAlign = TextAlign.Center,
             modifier  = Modifier.fillMaxWidth()
         )
         Text(
-            text      = "Alineado a la derecha",
+            text      = "Envío gratis a todo el país",
             textAlign = TextAlign.End,
             modifier  = Modifier.fillMaxWidth()
         )

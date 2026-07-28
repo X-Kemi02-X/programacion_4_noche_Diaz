@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/servidores_provider.dart';
+import '../providers/telefonos_provider.dart';
 
 class PantallaBusqueda extends ConsumerWidget {
   const PantallaBusqueda({super.key});
@@ -22,11 +22,11 @@ class PantallaBusqueda extends ConsumerWidget {
                 ? [IconButton(
                     icon: const Icon(Icons.clear),
                     onPressed: () =>
-                        ref.read(busquedaProvider.notifier).state = '',
+                        ref.read(busquedaProvider.notifier).limpiar(),
                   )]
                 : null,
             onChanged: (v) =>
-                ref.read(busquedaProvider.notifier).state = v,
+                ref.read(busquedaProvider.notifier).setValor(v),
             padding: const WidgetStatePropertyAll(
               EdgeInsets.symmetric(horizontal: 16),
             ),

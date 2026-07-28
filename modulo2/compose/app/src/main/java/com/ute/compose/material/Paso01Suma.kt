@@ -25,7 +25,7 @@ fun Paso01_SumaScreen() {
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        Text("Paso 1 · TextField y Suma de Números",
+        Text("Paso 1 · Suma de presupuestos",
             style = MaterialTheme.typography.titleMedium)
         HorizontalDivider()
 

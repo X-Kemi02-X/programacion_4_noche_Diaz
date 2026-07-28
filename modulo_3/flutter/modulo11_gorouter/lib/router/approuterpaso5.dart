@@ -3,15 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import '../screens/scaffoldconnav.dart';
-import '../screens/pantalla_servidores.dart';
+import '../screens/pantalla_telefonos.dart';
 import '../screens/pantalla_detalle.dart';
 import '../screens/pantallametricas.dart';
 import '../screens/pantalla_ajustes.dart';
 import '../screens/pantalla_login.dart';
-import '../models/servidor_ssh.dart';
+import '../models/telefono.dart';
 
 GoRouter appRouterPaso5(WidgetRef ref) => GoRouter(
-  initialLocation: '/servidores',
+  initialLocation: '/telefonos',
   debugLogDiagnostics: true,
   redirect: (context, state) {
     final authState     = ref.read(authProvider);
@@ -19,7 +19,7 @@ GoRouter appRouterPaso5(WidgetRef ref) => GoRouter(
     final enLogin       = state.matchedLocation == '/login';
 
     if (!autenticado && !enLogin) return '/login';
-    if (autenticado && enLogin)   return '/servidores';
+    if (autenticado && enLogin)   return '/telefonos';
     return null;
   },
   routes: [
@@ -27,7 +27,7 @@ GoRouter appRouterPaso5(WidgetRef ref) => GoRouter(
       builder: (context, state, child) => ScaffoldConNav(child: child),
       routes: [
         GoRoute(
-          path:    '/servidores',
+          path:    '/telefonos',
           builder: (_, __) => const PantallaTelefonos(),
           routes: [
             GoRoute(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../screens/pantalla_inicio.dart';
-import '../screens/pantalla_servidores.dart';
+import '../screens/pantalla_telefonos.dart';
 import '../screens/pantalla_detalle.dart';
-import '../models/servidor_ssh.dart';
+import '../models/telefono.dart';
 
 final appRouterPaso2 = GoRouter(
   initialLocation: '/',
@@ -14,7 +14,7 @@ final appRouterPaso2 = GoRouter(
       builder: (context, state) => const PantallaInicio(),
     ),
     GoRoute(
-      path:    '/servidores',
+      path:    '/telefonos',
       builder: (context, state) => const PantallaTelefonos(),
       routes: [
         GoRoute(
@@ -26,12 +26,12 @@ final appRouterPaso2 = GoRouter(
           },
         ),
         GoRoute(
-          path:    ':id/logs',
+          path:    ':id/resenas',
           builder: (context, state) {
             final id = state.pathParameters['id']!;
             return Scaffold(
-              appBar: AppBar(title: Text('Info de $id')),
-              body:   Center(child: Text('Detalles del teléfono $id')),
+              appBar: AppBar(title: Text('Reseñas de $id')),
+              body:   Center(child: Text('Opiniones del teléfono $id')),
             );
           },
         ),

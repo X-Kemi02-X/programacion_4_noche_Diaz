@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:modulo11_gorouter/models/servidor_ssh.dart';
+import 'package:modulo11_gorouter/models/telefono.dart';
 
 class PantallaTelefonos extends StatelessWidget {
   const PantallaTelefonos({super.key});
@@ -23,7 +23,7 @@ class PantallaTelefonos extends StatelessWidget {
           title:   Text(telefonos[i].modelo),
           subtitle: Text('${telefonos[i].marca} - \$${telefonos[i].precio.toStringAsFixed(2)}'),
           onTap: () {
-            context.push('/servidores/${telefonos[i].id}',
+            context.push('/telefonos/${telefonos[i].id}',
               extra: telefonos[i],
             );
           },

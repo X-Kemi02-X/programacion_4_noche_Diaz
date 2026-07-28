@@ -7,8 +7,8 @@ class PantallaDialogs extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(esError
-            ? 'Error: no se pudo conectar al servidor'
-            : 'Conexión SSH establecida correctamente'),
+            ? 'Error: no se pudo agregar al carrito'
+            : 'Producto agregado al carrito correctamente'),
         backgroundColor: esError
             ? Theme.of(context).colorScheme.error
             : null,
@@ -28,9 +28,9 @@ class PantallaDialogs extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         icon:    const Icon(Icons.warning_amber, color: Colors.orange),
-        title:   const Text('Eliminar servidor'),
+        title:   const Text('Eliminar producto'),
         content: const Text(
-          '¿Estás seguro de que deseas eliminar prod-web-01?\n'
+          '¿Estás seguro de que deseas eliminar Samsung Galaxy S25?\n'
           'Esta acción no se puede deshacer.',
         ),
         actions: [
@@ -53,38 +53,37 @@ class PantallaDialogs extends StatelessWidget {
 
     if (confirmar == true) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Servidor eliminado correctamente')),
+        const SnackBar(content: Text('Producto eliminado correctamente')),
       );
     }
   }
 
   Future<void> _mostrarFormulario(BuildContext context) async {
     final formKey = GlobalKey<FormState>();
-    final ctrlNombre = TextEditingController();
-    final ctrlIp     = TextEditingController();
+    final ctrlModelo = TextEditingController();
+    final ctrlPrecio     = TextEditingController();
 
     await showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Agregar servidor'),
+        title: const Text('Agregar producto'),
         content: Form(
           key: formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextFormField(
-                controller:  ctrlNombre,
-                decoration:  const InputDecoration(labelText: 'Nombre'),
+                controller:  ctrlModelo,
+                decoration:  const InputDecoration(labelText: 'Modelo'),
                 validator:   (v) => v == null || v.isEmpty ? 'Campo requerido' : null,
               ),
               const SizedBox(height: 8),
               TextFormField(
-                controller: ctrlIp,
-                decoration: const InputDecoration(labelText: 'Dirección IP'),
+                controller: ctrlPrecio,
+                decoration: const InputDecoration(labelText: 'Precio'),
                 validator:  (v) {
                   if (v == null || v.isEmpty) return 'Campo requerido';
-                  final partes = v.split('.');
-                  if (partes.length != 4) return 'Formato: 192.168.1.1';
+                  if (double.tryParse(v) == null) return 'Ingrese un número válido';
                   return null;
                 },
               ),
@@ -109,9 +108,9 @@ class PantallaDialogs extends StatelessWidget {
     );
 
     if (!context.mounted) return;
-    if (ctrlNombre.text.isNotEmpty) {
+    if (ctrlModelo.text.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Servidor "${ctrlNombre.text}" agregado')),
+        SnackBar(content: Text('Producto "${ctrlModelo.text}" agregado')),
       );
     }
   }
@@ -159,12 +158,12 @@ class PantallaDialogs extends StatelessWidget {
             ),
             onPressed: () => _mostrarConfirmacion(context),
             icon:  const Icon(Icons.delete_outline),
-            label: const Text('Eliminar servidor (confirmación)'),
+            label: const Text('Eliminar producto (confirmación)'),
           ),
           const SizedBox(height: 8),
           FilledButton.tonal(
             onPressed: () => _mostrarFormulario(context),
-            child: const Text('Agregar servidor (formulario)'),
+            child: const Text('Agregar producto (formulario)'),
           ),
         ],
       ),

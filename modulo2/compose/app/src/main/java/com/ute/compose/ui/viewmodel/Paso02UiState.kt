@@ -80,7 +80,7 @@ fun Paso02_UiStateScreen(vm: ProductosUiStateViewModel = viewModel()) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         CircularProgressIndicator()
                         Spacer(Modifier.height(12.dp))
-                        Text("Cargando productos...",
+                        Text("Cargando teléfonos...",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
@@ -118,7 +118,7 @@ fun Paso02_UiStateScreen(vm: ProductosUiStateViewModel = viewModel()) {
             is UiState.Success -> {
                 // estado.data está disponible aquí como List<Producto>
                 Text(
-                    "${estado.data.size} producto(s)",
+                    "${estado.data.size} teléfono(s)",
                     style    = MaterialTheme.typography.labelSmall,
                     color    = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)

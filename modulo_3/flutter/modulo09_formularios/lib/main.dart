@@ -1,9 +1,9 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
-import 'widgets/formulario_servidor.dart';
+import 'widgets/formulario_producto.dart';
 import 'models/telefono.dart';
-import 'widgets/fila_servidor.dart';
-import 'screens/pantalla_servidores.dart';
+import 'widgets/fila_producto.dart';
+import 'screens/pantalla_productos.dart';
 import 'screens/pantalla_busqueda.dart';
 
 const int paso = 4;

@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Paso01Suma() {
+fun Paso01_TextFieldScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -26,7 +26,7 @@ fun Paso01Suma() {
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        Text("Paso 1 · TextField y OutlinedTextField",
+        Text("Paso 1 · TextField — Calculadora de precios",
             style = MaterialTheme.typography.titleMedium)
         HorizontalDivider()
         SumaNumeros()
@@ -84,5 +84,5 @@ private fun SumaNumeros() {
 @Preview(showBackground = true)
 @Composable
 fun Paso01SumaPreview() {
-    MaterialTheme { Paso01Suma() }
+    MaterialTheme { Paso01_TextFieldScreen() }
 }

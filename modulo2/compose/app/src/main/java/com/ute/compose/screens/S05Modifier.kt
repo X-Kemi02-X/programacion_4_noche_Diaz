@@ -68,14 +68,14 @@ fun S05_ModifierScreen() {
 
         EtiquetaSeccion("3. CircleShape + clickable")
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            listOf("A" to Color(0xFF1976D2), "B" to Color(0xFF388E3C), "C" to Color(0xFFF57C00))
+            listOf("S" to Color(0xFF1976D2), "A" to Color(0xFF388E3C), "X" to Color(0xFFF57C00))
                 .forEach { (letra, color) ->
                     Box(
                         modifier = Modifier
                             .size(56.dp)
                             .clip(CircleShape)
                             .background(color)
-                            .clickable { ultimoClick = "Avatar $letra presionado" },
+                            .clickable { ultimoClick = "Marca $letra presionada" },
                         contentAlignment = Alignment.Center
                     ) {
                         Text(letra, color = Color.White,
@@ -86,7 +86,7 @@ fun S05_ModifierScreen() {
 
         EtiquetaSeccion("4. fillMaxWidth + padding asimétrico")
         Text(
-            text     = "horizontal: 32dp, vertical: 8dp",
+            text     = "Samsung Galaxy S25 — $899 — Stock: 15",
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(0xFFE8F5E9))
@@ -96,9 +96,9 @@ fun S05_ModifierScreen() {
         EtiquetaSeccion("5. size fijo vs fillMaxWidth")
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Box(Modifier.size(60.dp).background(Color(0xFFBBDEFB)),
-                contentAlignment = Alignment.Center) { Text("60dp") }
+                contentAlignment = Alignment.Center) { Text("Logo") }
             Box(Modifier.weight(1f).height(60.dp).background(Color(0xFFB3E5FC)),
-                contentAlignment = Alignment.Center) { Text("weight(1f)") }
+                contentAlignment = Alignment.Center) { Text("Nombre del producto") }
         }
     }
 }

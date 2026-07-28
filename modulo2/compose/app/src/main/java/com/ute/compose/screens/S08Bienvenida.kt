@@ -47,17 +47,16 @@ private fun PasoUno(onSiguiente: () -> Unit) {
 
         Spacer(Modifier.height(8.dp))
 
-        Text("Elige un tema",
+        Text("Elige una marca",
             style      = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold)
-        Text("Selecciona el color que más te guste",
+        Text("Selecciona la marca que más te guste",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant)
 
         Spacer(Modifier.height(8.dp))
 
-        // Selector de tema — state hoisting: el estado vive en PasoUno
-        listOf("🔵 Azul", "🟢 Verde", "🟣 Morado").forEach { tema ->
+        listOf("Samsung", "Apple", "Xiaomi").forEach { tema ->
             val seleccionado = temaElegido == tema
             Button(
                 onClick  = { temaElegido = tema },
@@ -86,18 +85,18 @@ private fun PasoUno(onSiguiente: () -> Unit) {
     }
 }
 
-// ── Paso 2: ajusta el nivel de experiencia ───────────────────────────────────
+// ── Paso 2: ajusta tu presupuesto ───────────────────────────────────
 @Composable
 private fun PasoDos(onSiguiente: () -> Unit, onVolver: () -> Unit) {
     var nivel by remember { mutableStateOf(1) }
     val max = 5
 
     val descripcion = when (nivel) {
-        1    -> "Recién comienzo con Android"
-        2    -> "Conozco algo de XML"
-        3    -> "Tengo experiencia con Views"
-        4    -> "He usado Compose antes"
-        else -> "Experto en Compose"
+        1    -> "Menos de $200"
+        2    -> "De $200 a $400"
+        3    -> "De $400 a $700"
+        4    -> "De $700 a $1000"
+        else -> "Más de $1000"
     }
 
     Column(
@@ -108,7 +107,7 @@ private fun PasoDos(onSiguiente: () -> Unit, onVolver: () -> Unit) {
 
         Spacer(Modifier.height(8.dp))
 
-        Text("Tu nivel de experiencia",
+        Text("Tu rango de precio",
             style      = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold)
 
@@ -183,13 +182,13 @@ private fun PasoTres(onReiniciar: () -> Unit) {
                 color      = MaterialTheme.colorScheme.onPrimaryContainer)
         }
 
-        Text("¡Configuración lista!",
+        Text("¡Preferencias guardadas!",
             style      = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold)
 
         Text(
-            "Has completado los 3 pasos del onboarding.\n" +
-                    "En la página 12 aprenderemos TextField, Card, LazyColumn y más.",
+            "Has configurado tu tienda de móviles.\n" +
+                    "Ahora puedes explorar el catálogo de teléfonos.",
             style     = MaterialTheme.typography.bodyMedium,
             color     = MaterialTheme.colorScheme.onSurfaceVariant
         )

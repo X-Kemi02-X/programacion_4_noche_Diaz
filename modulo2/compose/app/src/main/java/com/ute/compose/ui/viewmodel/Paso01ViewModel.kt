@@ -42,7 +42,7 @@ fun Paso01_ViewModelScreen(
         OutlinedTextField(
             value         = busqueda,
             onValueChange = { vm.actualizarBusqueda(it) },
-            placeholder   = { Text("Buscar producto...") },
+            placeholder   = { Text("Buscar teléfono...") },
             leadingIcon   = { Icon(Icons.Default.Search, null) },
             trailingIcon  = {
                 if (busqueda.isNotEmpty())
@@ -63,7 +63,7 @@ fun Paso01_ViewModelScreen(
 
         // Contador de resultados — derivado del StateFlow
         Text(
-            "${productos.size} producto(s)",
+            "${productos.size} teléfono(s)",
             style    = MaterialTheme.typography.labelSmall,
             color    = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)

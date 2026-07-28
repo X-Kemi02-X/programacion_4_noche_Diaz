@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modulo11_gorouter/screens/scaffoldconnav.dart';
-import '../screens/pantalla_servidores.dart';
+import '../screens/pantalla_telefonos.dart';
 import '../screens/pantalla_detalle.dart';
 import '../screens/pantallametricas.dart';
 import '../screens/pantalla_ajustes.dart';
-import '../models/servidor_ssh.dart';
+import '../models/telefono.dart';
 
 final appRouterPaso4 = GoRouter(
-  initialLocation: '/servidores',
+  initialLocation: '/telefonos',
   debugLogDiagnostics: true,
   routes: [
     ShellRoute(
       builder: (context, state, child) => ScaffoldConNav(child: child),
       routes: [
         GoRoute(
-          path:    '/servidores',
+          path:    '/telefonos',
           builder: (_, __) => const PantallaTelefonos(),
           routes: [
             GoRoute(

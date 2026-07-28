@@ -66,11 +66,11 @@ class PantallaTema extends StatelessWidget {
                     Row(children: [
                       FilledButton.icon(
                         onPressed: () {},
-                        icon:  const Icon(Icons.terminal, size: 16),
-                        label: const Text('SSH'),
+                        icon:  const Icon(Icons.phone_android, size: 16),
+                        label: const Text('Comprar'),
                       ),
                       const SizedBox(width: 8),
-                      OutlinedButton(onPressed: () {}, child: const Text('Logs')),
+                      OutlinedButton(onPressed: () {}, child: const Text('Ver más')),
                     ]),
                   ],
                 ),

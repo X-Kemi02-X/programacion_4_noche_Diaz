@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../screens/pantalla_inicio.dart';
-import '../screens/pantalla_servidores.dart';
+import '../screens/pantalla_telefonos.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
@@ -13,8 +13,8 @@ final appRouter = GoRouter(
       builder: (context, state) => const PantallaInicio(),
     ),
     GoRoute(
-      path:    '/servidores',
-      name:    'servidores',
+      path:    '/telefonos',
+      name:    'telefonos',
       builder: (context, state) => const PantallaTelefonos(),
     ),
   ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../models/servidor_ssh.dart';
+import '../models/telefono.dart';
 
 class PantallaDetalle extends StatelessWidget {
   final String    id;

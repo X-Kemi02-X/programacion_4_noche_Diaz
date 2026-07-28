@@ -20,7 +20,7 @@ class ScaffoldConNav extends StatelessWidget {
         selectedIndex:         _indiceActivo(context),
         onDestinationSelected: (i) {
           switch (i) {
-            case 0: context.go('/servidores');
+            case 0: context.go('/telefonos');
             case 1: context.go('/metricas');
             case 2: context.go('/ajustes');
           }

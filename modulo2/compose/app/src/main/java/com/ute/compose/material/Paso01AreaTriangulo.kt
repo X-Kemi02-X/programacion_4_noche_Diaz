@@ -28,7 +28,7 @@ fun Paso01AreaTriangulo() {
     ) {
 
         Text(
-            "Paso 1 · Área de un Triángulo",
+            "Paso 1 · Área de pantalla (pulgadas)",
             style = MaterialTheme.typography.titleMedium
         )
 
@@ -56,7 +56,7 @@ private fun DemoAreaTriangulo() {
     ) {
 
         Text(
-            "Calcular área del triángulo",
+            "Calcular área de pantalla",
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary
         )
@@ -131,7 +131,7 @@ private fun DemoAreaTriangulo() {
                 ) {
 
                     Text(
-                        "Área: $resultado",
+                        "Área pantalla: $resultado pulg²",
                         style = MaterialTheme.typography.headlineSmall,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )

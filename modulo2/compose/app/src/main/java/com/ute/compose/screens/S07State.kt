@@ -70,7 +70,7 @@ private fun DemoEstadoElevado() {
     var seleccion by remember { mutableStateOf<String?>(null) }
     var historial by remember { mutableStateOf(listOf<String>()) }
 
-    val opciones = listOf("🔴 Rojo", "🟢 Verde", "🔵 Azul", "🟡 Amarillo")
+    val opciones = listOf("Samsung", "Apple", "Xiaomi", "Motorola")
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         EtiquetaSeccion("✅ Estado elevado — el padre coordina todo")
@@ -97,10 +97,10 @@ private fun DemoEstadoElevado() {
         // El padre usa el mismo estado para dos cosas distintas
         seleccion?.let { sel ->
             val color = when {
-                "Rojo"     in sel -> Color(0xFFFFCDD2)
-                "Verde"    in sel -> Color(0xFFC8E6C9)
-                "Azul"     in sel -> Color(0xFFBBDEFB)
-                "Amarillo" in sel -> Color(0xFFFFF9C4)
+                "Samsung"  in sel -> Color(0xFFBBDEFB)
+                "Apple"    in sel -> Color(0xFFC8E6C9)
+                "Xiaomi"   in sel -> Color(0xFFFFF9C4)
+                "Motorola" in sel -> Color(0xFFFFCDD2)
                 else              -> Color.Transparent
             }
             Box(

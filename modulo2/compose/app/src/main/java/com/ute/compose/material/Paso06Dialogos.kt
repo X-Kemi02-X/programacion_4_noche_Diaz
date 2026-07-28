@@ -1,6 +1,5 @@
 package com.ute.compose.material
 
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -26,28 +25,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.clip
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Paso06_DialogosScreen() {
-    var contactos        by remember { mutableStateOf(contactosDeMuestra) }
+    var productos        by remember { mutableStateOf(contactosDeMuestra) }
     var busqueda         by remember { mutableStateOf("") }
     var filtro           by remember { mutableStateOf("Todos") }
-    var destinoActual    by remember { mutableStateOf("contactos") }
+    var destinoActual    by remember { mutableStateOf("catalogo") }
 
-
-    // Estado de los diálogos — cada booleano controla visibilidad de un dialog
     var mostrarNuevo     by remember { mutableStateOf(false) }
-    var contactoAEliminar by remember { mutableStateOf<Contacto?>(null) }
+    var productoAEliminar by remember { mutableStateOf<Contacto?>(null) }
 
-
-    // Snackbar: un String nullable — null = nada que mostrar
     var mensajeSnack     by remember { mutableStateOf<String?>(null) }
     val snackbarHostState = remember { SnackbarHostState() }
 
-
-    // LaunchedEffect: ejecuta el bloque cada vez que 'mensajeSnack' cambia
-    // Es una coroutine — showSnackbar() suspende hasta que el snackbar desaparece
     LaunchedEffect(mensajeSnack) {
         mensajeSnack?.let {
             snackbarHostState.showSnackbar(it)
@@ -55,34 +46,31 @@ fun Paso06_DialogosScreen() {
         }
     }
 
-
-    val contactosFiltrados = contactos
-        .filter { c -> if (filtro == "Favoritos") c.favorito else true }
+    val productosFiltrados = productos
+        .filter { c -> if (filtro == "Destacados") c.favorito else true }
         .filter { c -> busqueda.isBlank() || c.nombre.contains(busqueda, ignoreCase = true) }
 
-
     val destinos = listOf(
-        DestinoNav("contactos", "Contactos", Icons.Filled.People,       Icons.Outlined.People),
-        DestinoNav("favoritos", "Favoritos", Icons.Filled.Favorite,     Icons.Outlined.FavoriteBorder),
+        DestinoNav("catalogo",  "Catálogo", Icons.Filled.PhoneAndroid,     Icons.Outlined.PhoneAndroid),
+        DestinoNav("destacados", "Destacados", Icons.Filled.Favorite,     Icons.Outlined.FavoriteBorder),
         DestinoNav("perfil",    "Perfil",    Icons.Filled.AccountCircle, Icons.Outlined.AccountCircle),
     )
-
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Agenda (${contactos.size})", fontWeight = FontWeight.Bold)
+                    Text("Tienda (${productos.size})", fontWeight = FontWeight.Bold)
                 },
                 actions = {
                     IconButton(onClick = {
-                        filtro = if (filtro == "Favoritos") "Todos" else "Favoritos"
+                        filtro = if (filtro == "Destacados") "Todos" else "Destacados"
                     }) {
                         Icon(
-                            imageVector = if (filtro == "Favoritos")
+                            imageVector = if (filtro == "Destacados")
                                 Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = "Filtrar favoritos",
-                            tint = if (filtro == "Favoritos")
+                            contentDescription = "Filtrar destacados",
+                            tint = if (filtro == "Destacados")
                                 MaterialTheme.colorScheme.error
                             else
                                 MaterialTheme.colorScheme.onPrimaryContainer
@@ -112,35 +100,33 @@ fun Paso06_DialogosScreen() {
             }
         },
         floatingActionButton = {
-            if (destinoActual == "contactos") {
+            if (destinoActual == "catalogo") {
                 FloatingActionButton(onClick = { mostrarNuevo = true }) {
-                    Icon(Icons.Default.PersonAdd, "Nuevo contacto")
+                    Icon(Icons.Default.Add, "Nuevo producto")
                 }
             }
         },
-        // snackbarHost conecta el SnackbarHostState con el Scaffold
         snackbarHost = { SnackbarHost(snackbarHostState) }
-
 
     ) { paddingValues ->
         when (destinoActual) {
-            "contactos" -> ContenidoContactos(
-                contactos    = contactosFiltrados,
+            "catalogo" -> ContenidoCatalogo(
+                productos    = productosFiltrados,
                 busqueda     = busqueda,
                 filtro       = filtro,
                 onBusqueda   = { busqueda = it },
                 onFiltro     = { filtro = it },
                 onFavorito   = { id ->
-                    contactos = contactos.map { c ->
+                    productos = productos.map { c ->
                         if (c.id == id) c.copy(favorito = !c.favorito) else c
                     }
                 },
-                onLlamar     = { nombre -> mensajeSnack = "📞 Llamando a $nombre..." },
-                onEliminar   = { contacto -> contactoAEliminar = contacto },
+                onVerDetalle     = { nombre -> mensajeSnack = "Viendo detalles de $nombre..." },
+                onEliminar   = { producto -> productoAEliminar = producto },
                 modifier     = Modifier.padding(paddingValues)
             )
-            "favoritos" -> PantallaFavoritosContent(
-                favoritos = contactos.filter { it.favorito },
+            "destacados" -> PantallaDestacadosContent(
+                destacados = productos.filter { it.favorito },
                 modifier  = Modifier.padding(paddingValues)
             )
             "perfil"    -> PantallaPerfilContent(
@@ -149,41 +135,35 @@ fun Paso06_DialogosScreen() {
         }
     }
 
-
-    // ── Diálogo 1: Nuevo contacto (Dialog personalizado) ────────────────────
-    // Usamos Dialog (no AlertDialog) para tener control total del contenido
     if (mostrarNuevo) {
-        DialogNuevoContacto(
+        DialogNuevoProducto(
             onDismiss = { mostrarNuevo = false },
             onGuardar = { nuevo ->
-                contactos    = contactos + nuevo
+                productos    = productos + nuevo
                 mostrarNuevo = false
-                mensajeSnack = "✅ ${nuevo.nombre} agregado"
+                mensajeSnack = "✅ ${nuevo.nombre} agregado al catálogo"
             }
         )
     }
 
-
-    // ── Diálogo 2: Confirmar eliminación (AlertDialog estándar) ─────────────
-    // contactoAEliminar != null → mostrar dialog; null → ocultarlo
-    contactoAEliminar?.let { contacto ->
+    productoAEliminar?.let { producto ->
         AlertDialog(
-            onDismissRequest = { contactoAEliminar = null },
+            onDismissRequest = { productoAEliminar = null },
             icon    = {
                 Icon(Icons.Default.Warning, null,
                     tint = MaterialTheme.colorScheme.error)
             },
-            title   = { Text("Eliminar contacto") },
+            title   = { Text("Eliminar producto") },
             text    = {
-                Text("¿Seguro que quieres eliminar a ${contacto.nombre}? " +
+                Text("¿Seguro que quieres eliminar ${producto.nombre}? " +
                         "Esta acción no se puede deshacer.")
             },
             confirmButton = {
                 Button(
                     onClick = {
-                        contactos         = contactos.filter { it.id != contacto.id }
-                        mensajeSnack      = "🗑 ${contacto.nombre} eliminado"
-                        contactoAEliminar = null
+                        productos         = productos.filter { it.id != producto.id }
+                        mensajeSnack      = "🗑 ${producto.nombre} eliminado"
+                        productoAEliminar = null
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error
@@ -191,7 +171,7 @@ fun Paso06_DialogosScreen() {
                 ) { Text("Eliminar") }
             },
             dismissButton = {
-                OutlinedButton(onClick = { contactoAEliminar = null }) {
+                OutlinedButton(onClick = { productoAEliminar = null }) {
                     Text("Cancelar")
                 }
             }
@@ -199,19 +179,15 @@ fun Paso06_DialogosScreen() {
     }
 }
 
-
-// ── Contenido de la pestaña Contactos ───────────────────────────────────────
-
-
 @Composable
-private fun ContenidoContactos(
-    contactos:  List<Contacto>,
+private fun ContenidoCatalogo(
+    productos:  List<Contacto>,
     busqueda:   String,
     filtro:     String,
     onBusqueda: (String) -> Unit,
     onFiltro:   (String) -> Unit,
     onFavorito: (Int) -> Unit,
-    onLlamar:   (String) -> Unit,
+    onVerDetalle:   (String) -> Unit,
     onEliminar: (Contacto) -> Unit,
     modifier:   Modifier = Modifier
 ) {
@@ -219,7 +195,7 @@ private fun ContenidoContactos(
         OutlinedTextField(
             value         = busqueda,
             onValueChange = onBusqueda,
-            placeholder   = { Text("Buscar contacto...") },
+            placeholder   = { Text("Buscar teléfono...") },
             leadingIcon   = { Icon(Icons.Default.Search, null) },
             trailingIcon  = {
                 if (busqueda.isNotEmpty())
@@ -231,12 +207,11 @@ private fun ContenidoContactos(
             modifier   = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
         )
 
-
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding        = PaddingValues(horizontal = 16.dp)
         ) {
-            items(listOf("Todos", "Favoritos")) { opcion ->
+            items(listOf("Todos", "Destacados")) { opcion ->
                 FilterChip(
                     selected    = filtro == opcion,
                     onClick     = { onFiltro(opcion) },
@@ -249,11 +224,9 @@ private fun ContenidoContactos(
             }
         }
 
-
         Spacer(Modifier.height(4.dp))
 
-
-        if (contactos.isEmpty()) {
+        if (productos.isEmpty()) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(Icons.Default.SearchOff, null, Modifier.size(56.dp),
@@ -270,18 +243,17 @@ private fun ContenidoContactos(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 item {
-                    Text("${contactos.size} contacto(s)",
+                    Text("${productos.size} teléfono(s)",
                         style    = MaterialTheme.typography.labelSmall,
                         color    = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(bottom = 4.dp))
                 }
-                items(contactos, key = { it.id }) { contacto ->
-                    // TarjetaContacto ahora con TODOS los callbacks conectados
-                    TarjetaContactoCompleta(
-                        contacto   = contacto,
-                        onFavorito = { onFavorito(contacto.id) },
-                        onLlamar   = { onLlamar(contacto.nombre) },
-                        onEliminar = { onEliminar(contacto) }
+                items(productos, key = { it.id }) { producto ->
+                    TarjetaProductoCompleta(
+                        contacto   = producto,
+                        onFavorito = { onFavorito(producto.id) },
+                        onVerDetalle   = { onVerDetalle(producto.nombre) },
+                        onEliminar = { onEliminar(producto) }
                     )
                 }
                 item { Spacer(Modifier.height(100.dp)) }
@@ -290,13 +262,11 @@ private fun ContenidoContactos(
     }
 }
 
-
-// TarjetaContacto extendida con botón de eliminar
 @Composable
-private fun TarjetaContactoCompleta(
+private fun TarjetaProductoCompleta(
     contacto:  Contacto,
     onFavorito: () -> Unit,
-    onLlamar:  () -> Unit,
+    onVerDetalle:  () -> Unit,
     onEliminar: () -> Unit
 ) {
     ElevatedCard(modifier = Modifier.fillMaxWidth()) {
@@ -325,7 +295,7 @@ private fun TarjetaContactoCompleta(
                 Text(contacto.email,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(contacto.telefono,
+                Text("Precio: ${contacto.telefono}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
@@ -337,8 +307,8 @@ private fun TarjetaContactoCompleta(
                     else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            IconButton(onClick = onLlamar) {
-                Icon(Icons.Default.Phone, null,
+            IconButton(onClick = onVerDetalle) {
+                Icon(Icons.Default.Visibility, null,
                     tint = MaterialTheme.colorScheme.primary)
             }
             IconButton(onClick = onEliminar) {
@@ -349,77 +319,68 @@ private fun TarjetaContactoCompleta(
     }
 }
 
-
-// ── Diálogo personalizado: formulario de nuevo contacto ──────────────────────
 @Composable
-private fun DialogNuevoContacto(
+private fun DialogNuevoProducto(
     onDismiss: () -> Unit,
     onGuardar: (Contacto) -> Unit
 ) {
     var nombre   by remember { mutableStateOf("") }
     var email    by remember { mutableStateOf("") }
-    var telefono by remember { mutableStateOf("") }
-
+    var precio by remember { mutableStateOf("") }
 
     val nombreValido   = nombre.trim().length >= 2
     val emailValido    = email.contains("@") && email.contains(".")
-    val telefonoValido = telefono.length >= 7
-    val valido         = nombreValido && emailValido && telefonoValido
+    val precioValido = precio.length >= 1
+    val valido         = nombreValido && emailValido && precioValido
 
-
-    // Dialog (no AlertDialog) → contenido completamente personalizado
     Dialog(onDismissRequest = onDismiss) {
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(
                 modifier            = Modifier.padding(24.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Text("Nuevo contacto",
+                Text("Nuevo teléfono",
                     style      = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold)
-
 
                 OutlinedTextField(
                     value           = nombre,
                     onValueChange   = { nombre = it },
-                    label           = { Text("Nombre") },
-                    leadingIcon     = { Icon(Icons.Default.Person, null) },
+                    label           = { Text("Modelo") },
+                    leadingIcon     = { Icon(Icons.Default.PhoneAndroid, null) },
                     isError         = nombre.isNotEmpty() && !nombreValido,
                     singleLine      = true,
                     modifier        = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
                 )
 
-
                 OutlinedTextField(
                     value           = email,
                     onValueChange   = { email = it },
-                    label           = { Text("Email") },
-                    leadingIcon     = { Icon(Icons.Default.Email, null) },
+                    label           = { Text("Marca") },
+                    leadingIcon     = { Icon(Icons.Default.Business, null) },
                     isError         = email.isNotEmpty() && !emailValido,
                     singleLine      = true,
                     modifier        = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Email,
+                        keyboardType = KeyboardType.Text,
                         imeAction    = ImeAction.Next
                     )
                 )
 
-
                 OutlinedTextField(
-                    value           = telefono,
-                    onValueChange   = { telefono = it },
-                    label           = { Text("Teléfono") },
-                    leadingIcon     = { Icon(Icons.Default.Phone, null) },
-                    isError         = telefono.isNotEmpty() && !telefonoValido,
+                    value           = precio,
+                    onValueChange   = { precio = it },
+                    label           = { Text("Precio") },
+                    leadingIcon     = { Icon(Icons.Default.AttachMoney, null) },
+                    isError         = precio.isNotEmpty() && !precioValido,
                     singleLine      = true,
                     modifier        = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Phone,
+                        keyboardType = KeyboardType.Number,
                         imeAction    = ImeAction.Done
                     )
                 )
-
 
                 Row(
                     modifier              = Modifier.fillMaxWidth(),
@@ -435,31 +396,20 @@ private fun DialogNuevoContacto(
                                     id       = System.currentTimeMillis().toInt(),
                                     nombre   = nombre.trim(),
                                     email    = email.trim(),
-                                    telefono = telefono.trim()
+                                    telefono = precio.trim()
                                 )
                             )
                         },
                         enabled  = valido
-                    ) { Text("Guardar") }
+                    ) { Text("Agregar") }
                 }
             }
         }
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun Paso06_Preview() {
     MaterialTheme { Paso06_DialogosScreen() }
 }
-
-
-
-
-
-
-
-
-
-

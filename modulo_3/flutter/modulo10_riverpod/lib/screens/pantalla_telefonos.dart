@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/telefono.dart';
-import '../providers/servidores_provider.dart';
+import '../providers/telefonos_provider.dart';
 
 class PantallaTelefonos extends ConsumerWidget {
   const PantallaTelefonos({super.key});

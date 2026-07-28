@@ -35,9 +35,9 @@ fun S04_LayoutScreen() {
             verticalArrangement = Arrangement.spacedBy(4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CeldaLayout("Elemento 1", Color(0xFF90CAF9))
-            CeldaLayout("Elemento 2", Color(0xFF64B5F6))
-            CeldaLayout("Elemento 3", Color(0xFF42A5F5))
+            CeldaLayout("Samsung Galaxy", Color(0xFF90CAF9))
+            CeldaLayout("iPhone 16",      Color(0xFF64B5F6))
+            CeldaLayout("Xiaomi 14",      Color(0xFF42A5F5))
         }
 
         // ── ROW con Arrangement ────────────────────────────────────────────
@@ -50,9 +50,9 @@ fun S04_LayoutScreen() {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment     = Alignment.CenterVertically
         ) {
-            Text("Izquierda")
-            Text("Centro")
-            Text("Derecha")
+            Text("$899")
+            Text("Galaxy S25")
+            Text("Stock: 15")
         }
 
         EtiquetaSeccion("Row — SpaceEvenly")
@@ -63,18 +63,18 @@ fun S04_LayoutScreen() {
                 .padding(12.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Text("A"); Text("B"); Text("C"); Text("D")
+            Text("Samsung"); Text("Apple"); Text("Xiaomi"); Text("Motorola")
         }
 
         // ── ROW con weight ─────────────────────────────────────────────────
         EtiquetaSeccion("Row + weight (distribución proporcional 1:2:1)")
         Row(Modifier.fillMaxWidth().height(50.dp)) {
             Box(Modifier.weight(1f).fillMaxHeight().background(Color(0xFFEF9A9A)),
-                contentAlignment = Alignment.Center) { Text("1") }
+                contentAlignment = Alignment.Center) { Text("Gama Alta") }
             Box(Modifier.weight(2f).fillMaxHeight().background(Color(0xFFE57373)),
-                contentAlignment = Alignment.Center) { Text("2") }
+                contentAlignment = Alignment.Center) { Text("Gama Media") }
             Box(Modifier.weight(1f).fillMaxHeight().background(Color(0xFFEF5350)),
-                contentAlignment = Alignment.Center) { Text("1") }
+                contentAlignment = Alignment.Center) { Text("Básico") }
         }
 
         // ── BOX ────────────────────────────────────────────────────────────
@@ -93,7 +93,7 @@ fun S04_LayoutScreen() {
             Box(Modifier.size(40.dp).background(Color(0xFF1976D2))
                 .align(Alignment.BottomEnd))
             // Capa 3: centrada (por defecto del Box padre)
-            Text("Texto encima de todo",
+            Text("Smartphone",
                 color = Color.White,
                 style = MaterialTheme.typography.labelLarge)
         }

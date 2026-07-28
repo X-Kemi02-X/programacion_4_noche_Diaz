@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:modulo09_formularios/widgets/tarjetaservidorgrid.dart';
+import 'package:modulo09_formularios/widgets/tarjetaproductogrid.dart';
 import '../models/telefono.dart';
-import '../widgets/fila_servidor.dart';
+import '../widgets/fila_producto.dart';
 
 class PantallaTelefonos extends StatefulWidget {
   const PantallaTelefonos({super.key});

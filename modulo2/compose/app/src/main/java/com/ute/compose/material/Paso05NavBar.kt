@@ -18,8 +18,6 @@ import androidx.compose.ui.unit.dp
 import com.ute.compose.model.Contacto
 import com.ute.compose.model.contactosDeMuestra
 
-// Modelo del destino de navegación
-// Separar datos de presentación es buena práctica (SRP)
 data class DestinoNav(
     val ruta:          String,
     val etiqueta:      String,
@@ -30,19 +28,19 @@ data class DestinoNav(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Paso05_NavBarScreen() {
-    var destinoActual by remember { mutableStateOf("contactos") }
-    var contactos     by remember { mutableStateOf(contactosDeMuestra) }
+    var destinoActual by remember { mutableStateOf("catalogo") }
+    var productos     by remember { mutableStateOf(contactosDeMuestra) }
 
     val destinos = listOf(
-        DestinoNav("contactos", "Contactos", Icons.Filled.People,       Icons.Outlined.People),
-        DestinoNav("favoritos", "Favoritos", Icons.Filled.Favorite,     Icons.Outlined.FavoriteBorder),
+        DestinoNav("catalogo",  "Catálogo", Icons.Filled.PhoneAndroid,       Icons.Outlined.PhoneAndroid),
+        DestinoNav("destacados", "Destacados", Icons.Filled.Favorite,     Icons.Outlined.FavoriteBorder),
         DestinoNav("perfil",    "Perfil",    Icons.Filled.AccountCircle, Icons.Outlined.AccountCircle),
     )
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Agenda", fontWeight = FontWeight.Bold) },
+                title = { Text("Tienda Móvil", fontWeight = FontWeight.Bold) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor    = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -50,7 +48,6 @@ fun Paso05_NavBarScreen() {
             )
         },
 
-        // ── NavigationBar ──────────────────────────────────────────────────
         bottomBar = {
             NavigationBar {
                 destinos.forEach { destino ->
@@ -59,7 +56,6 @@ fun Paso05_NavBarScreen() {
                         selected = seleccionado,
                         onClick  = { destinoActual = destino.ruta },
                         icon     = {
-                            // Convención M3: relleno = activo, contorno = inactivo
                             Icon(
                                 imageVector        = if (seleccionado) destino.iconoActivo
                                 else destino.iconoInactivo,
@@ -73,28 +69,26 @@ fun Paso05_NavBarScreen() {
         },
 
         floatingActionButton = {
-            // FAB solo visible en la pestaña de contactos
-            if (destinoActual == "contactos") {
-                FloatingActionButton(onClick = { /* Paso 6 */ }) {
-                    Icon(Icons.Default.PersonAdd, "Nuevo contacto")
+            if (destinoActual == "catalogo") {
+                FloatingActionButton(onClick = { }) {
+                    Icon(Icons.Default.ShoppingCart, "Carrito")
                 }
             }
         }
 
     ) { paddingValues ->
-        // when actúa como router simple — en pág. 13 usaremos NavHost
         when (destinoActual) {
-            "contactos" -> PantallaContactosContent(
-                contactos  = contactos,
+            "catalogo" -> PantallaCatalogoContent(
+                productos  = productos,
                 onFavorito = { id ->
-                    contactos = contactos.map { c ->
+                    productos = productos.map { c ->
                         if (c.id == id) c.copy(favorito = !c.favorito) else c
                     }
                 },
                 modifier   = Modifier.padding(paddingValues)
             )
-            "favoritos" -> PantallaFavoritosContent(
-                favoritos = contactos.filter { it.favorito },
+            "destacados" -> PantallaDestacadosContent(
+                destacados = productos.filter { it.favorito },
                 modifier  = Modifier.padding(paddingValues)
             )
             "perfil"    -> PantallaPerfilContent(
@@ -104,11 +98,9 @@ fun Paso05_NavBarScreen() {
     }
 }
 
-// ── Contenido de cada pestaña ────────────────────────────────────────────────
-
 @Composable
-private fun PantallaContactosContent(
-    contactos:  List<Contacto>,
+private fun PantallaCatalogoContent(
+    productos:  List<Contacto>,
     onFavorito: (Int) -> Unit,
     modifier:   Modifier = Modifier
 ) {
@@ -117,10 +109,11 @@ private fun PantallaContactosContent(
         contentPadding      = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(contactos, key = { it.id }) { contacto ->
+        items(productos, key = { it.id }) { producto ->
             TarjetaContacto(
-                contacto   = contacto,
-                onFavorito = { onFavorito(contacto.id) }
+                contacto   = producto,
+                onFavorito = { onFavorito(producto.id) },
+                onVerDetalle = { }
             )
         }
         item { Spacer(Modifier.height(80.dp)) }
@@ -128,20 +121,20 @@ private fun PantallaContactosContent(
 }
 
 @Composable
-fun PantallaFavoritosContent(
-    favoritos: List<Contacto>,
+fun PantallaDestacadosContent(
+    destacados: List<Contacto>,
     modifier:  Modifier = Modifier
 ) {
-    if (favoritos.isEmpty()) {
+    if (destacados.isEmpty()) {
         Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(Icons.Default.FavoriteBorder, null,
                     Modifier.size(56.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(Modifier.height(12.dp))
-                Text("Sin favoritos aún",
+                Text("Sin destacados aún",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text("Toca el corazón en un contacto",
+                Text("Toca el corazón en un producto",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
@@ -152,8 +145,8 @@ fun PantallaFavoritosContent(
             contentPadding      = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(favoritos, key = { it.id }) { contacto ->
-                TarjetaContacto(contacto = contacto)
+            items(destacados, key = { it.id }) { producto ->
+                TarjetaContacto(contacto = producto)
             }
         }
     }

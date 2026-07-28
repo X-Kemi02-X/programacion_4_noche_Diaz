@@ -21,7 +21,7 @@ import com.ute.compose.model.contactosDeMuestra
 fun TarjetaContacto(
     contacto:  Contacto,
     onClick:   () -> Unit = {},
-    onLlamar:  () -> Unit = {},
+    onVerDetalle:  () -> Unit = {},
     onFavorito: () -> Unit = {}
 ) {
     // ElevatedCard con onClick → toda la tarjeta es presionable
@@ -88,10 +88,10 @@ fun TarjetaContacto(
                             MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                IconButton(onClick = onLlamar) {
+                IconButton(onClick = onVerDetalle) {
                     Icon(
-                        imageVector        = Icons.Default.Phone,
-                        contentDescription = "Llamar",
+                        imageVector        = Icons.Default.Visibility,
+                        contentDescription = "Ver detalle",
                         tint               = MaterialTheme.colorScheme.primary
                     )
                 }
@@ -119,9 +119,9 @@ fun Paso02_CardScreen() {
         contactosDeMuestra.take(3).forEach { contacto ->
             TarjetaContacto(
                 contacto  = contacto,
-                onClick   = { /* En el Paso 6: navegar al detalle */ },
-                onLlamar  = { /* En el Paso 6: mostrar snackbar */ },
-                onFavorito = { /* En el Paso 3: toggle en la lista */ }
+                onClick   = { },
+                onVerDetalle = { },
+                onFavorito = { }
             )
         }
 

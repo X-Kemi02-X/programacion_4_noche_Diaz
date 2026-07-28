@@ -35,19 +35,22 @@ fun Paso01CompraProducto() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DemoCompraProducto() {
 
-    var producto by remember { mutableStateOf("") }
+    var modelo = listOf("Samsung Galaxy S25", "iPhone 16", "Xiaomi 14T", "Motorola Edge 50")
+    var productoSeleccionado by remember { mutableStateOf(modelo.first()) }
     var cantidad by remember { mutableStateOf("") }
     var precio by remember { mutableStateOf("") }
     var subtotal by remember { mutableStateOf(0.0) }
     var descuento by remember { mutableStateOf(0.0) }
     var total by remember { mutableStateOf(0.0) }
+    var desplegarMenu by remember { mutableStateOf(false) }
     val cantidadValida = cantidad.toIntOrNull() != null
     val precioValido = precio.toDoubleOrNull() != null
     val formularioValido =
-        producto.isNotEmpty() &&
+        productoSeleccionado.isNotEmpty() &&
                 cantidadValida &&
                 precioValido
 
@@ -55,18 +58,38 @@ private fun DemoCompraProducto() {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
 
-        OutlinedTextField(
-            value = producto,
-            onValueChange = { producto = it },
-            label = { Text("Nombre del producto") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
+        ExposedDropdownMenuBox(
+            expanded = desplegarMenu,
+            onExpandedChange = { desplegarMenu = it }
+        ) {
+            OutlinedTextField(
+                value = productoSeleccionado,
+                onValueChange = {},
+                readOnly = true,
+                label = { Text("Modelo de teléfono") },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = desplegarMenu) },
+                modifier = Modifier.fillMaxWidth().menuAnchor()
+            )
+            ExposedDropdownMenu(
+                expanded = desplegarMenu,
+                onDismissRequest = { desplegarMenu = false }
+            ) {
+                modelo.forEach { item ->
+                    DropdownMenuItem(
+                        text = { Text(item) },
+                        onClick = {
+                            productoSeleccionado = item
+                            desplegarMenu = false
+                        }
+                    )
+                }
+            }
+        }
 
         OutlinedTextField(
             value = cantidad,
             onValueChange = { cantidad = it },
-            label = { Text("Cantidad comprada") },
+            label = { Text("Cantidad") },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next
@@ -93,8 +116,8 @@ private fun DemoCompraProducto() {
                 val prec = precio.toDoubleOrNull() ?: 0.0
                 subtotal = cant * prec
                 descuento = when {
-                    subtotal > 50 -> subtotal * 0.10
-                    subtotal in 20.0..50.0 -> subtotal * 0.05
+                    subtotal > 500 -> subtotal * 0.10
+                    subtotal in 200.0..500.0 -> subtotal * 0.05
                     else -> 0.0
                 }
                 total = subtotal - descuento
@@ -104,7 +127,7 @@ private fun DemoCompraProducto() {
         ) {
             Icon(Icons.Default.Calculate, null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Calcular")
+            Text("Calcular compra")
         }
 
         if (total > 0) {
@@ -118,11 +141,11 @@ private fun DemoCompraProducto() {
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text("Producto: $producto")
-                    Text("Subtotal: $subtotal")
-                    Text("Descuento aplicado: $descuento")
+                    Text("Teléfono: $productoSeleccionado")
+                    Text("Subtotal: $$subtotal")
+                    Text("Descuento: $$descuento")
                     Text(
-                        "Total a pagar: $total",
+                        "Total: $$total",
                         style = MaterialTheme.typography.titleMedium
                     )
                 }

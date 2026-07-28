@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../screens/pantalla_inicio.dart';
-import '../screens/pantallaservidoresfiltro.dart';
+import '../screens/pantalla_telefonos_filtro.dart';
 import '../screens/pantalla_detalle.dart';
-import '../models/servidor_ssh.dart';
+import '../models/telefono.dart';
 
 final appRouterPaso3 = GoRouter(
   initialLocation: '/',
@@ -13,13 +13,13 @@ final appRouterPaso3 = GoRouter(
       builder: (context, state) => const PantallaInicio(),
     ),
     GoRoute(
-      path:    '/servidores',
+      path:    '/telefonos',
       builder: (context, state) {
         return const PantallaTelefonosFiltro();
       },
     ),
     GoRoute(
-      path:    '/servidores/:id',
+      path:    '/telefonos/:id',
       builder: (context, state) {
         final id  = state.pathParameters['id']!;
         final tel = state.extra as Telefono?;

@@ -7,7 +7,7 @@ import 'widgets/reloj.dart';
 import 'widgets/pantalla_contexto.dart';
 import 'widgets/indicador.dart';
 
-const int paso = 8;
+const int paso = 7;
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,

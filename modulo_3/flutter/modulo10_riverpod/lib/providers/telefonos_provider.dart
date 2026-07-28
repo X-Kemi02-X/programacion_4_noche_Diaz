@@ -33,7 +33,14 @@ final telefonosProvider =
   TelefonosNotifier.new,
 );
 
-final busquedaProvider = StateProvider<String>((ref) => '');
+class BusquedaNotifier extends Notifier<String> {
+  @override
+  String build() => '';
+  void setValor(String valor) => state = valor;
+  void limpiar() => state = '';
+}
+
+final busquedaProvider = NotifierProvider<BusquedaNotifier, String>(BusquedaNotifier.new);
 
 final telefonosFiltradosProvider = Provider<List<Telefono>>((ref) {
   final todos    = ref.watch(telefonosProvider);

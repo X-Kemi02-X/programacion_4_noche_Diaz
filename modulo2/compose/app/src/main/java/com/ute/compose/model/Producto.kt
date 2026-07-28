@@ -32,12 +32,12 @@ data class PaginatedResponse(
 
 // Datos locales de muestra para los primeros pasos
 val productosDeMuestra = listOf(
-    Producto(1, "Teclado mecánico",  89.99,  "Periféricos", 15),
-    Producto(2, "Monitor 27\"",      349.99, "Pantallas",   8),
-    Producto(3, "Mouse inalámbrico", 29.99,  "Periféricos", 42, activo = false),
-    Producto(4, "Auriculares BT",    149.99, "Audio",       23),
-    Producto(5, "Webcam HD",         59.99,  "Cámaras",     11),
-    Producto(6, "Hub USB-C",         39.99,  "Accesorios",  30),
-    Producto(7, "SSD 1TB",           89.99,  "Almacenamiento", 19),
-    Producto(8, "Mousepad XL",       24.99,  "Periféricos", 55),
+    Producto(1, "Samsung Galaxy S25",   899.99,  "Gama Alta",    15),
+    Producto(2, "iPhone 16",            1099.99, "Gama Alta",    8),
+    Producto(3, "Xiaomi Redmi Note 14", 299.99,  "Gama Media",   42, activo = false),
+    Producto(4, "Google Pixel 9",       799.99,  "Gama Alta",    23),
+    Producto(5, "Motorola Edge 50",     449.99,  "Gama Media",   11),
+    Producto(6, "Samsung Galaxy A55",   379.99,  "Gama Media",   30),
+    Producto(7, "iPhone 15",            799.99,  "Gama Alta",    19),
+    Producto(8, "Xiaomi 14T",           499.99,  "Gama Media",   55),
 )

@@ -3,8 +3,7 @@ package com.ute.compose.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -42,13 +41,13 @@ fun S03_ButtonScreen() {
         Spacer(Modifier.height(4.dp))
 
         Button(
-            onClick  = { ultimoClick = "Button (Primary)" },
+            onClick  = { ultimoClick = "Comprar Samsung" },
             modifier = Modifier.fillMaxWidth()
-        ) { Text("Button — Primary") }
+        ) { Text("Comprar Samsung Galaxy") }
 
         // Button con ícono dentro del slot de contenido
         Button(
-            onClick  = { ultimoClick = "Button con ícono" },
+            onClick  = { ultimoClick = "Agregar iPhone al carrito" },
             modifier = Modifier.fillMaxWidth()
         ) {
             Icon(
@@ -57,47 +56,47 @@ fun S03_ButtonScreen() {
                 modifier           = Modifier.size(18.dp)
             )
             Spacer(Modifier.width(8.dp))
-            Text("Button con ícono")
+            Text("Agregar al carrito")
         }
 
         OutlinedButton(
-            onClick  = { ultimoClick = "OutlinedButton" },
+            onClick  = { ultimoClick = "Ver detalles del Pixel" },
             modifier = Modifier.fillMaxWidth()
-        ) { Text("OutlinedButton") }
+        ) { Text("Ver detalles") }
 
         TextButton(
-            onClick  = { ultimoClick = "TextButton" },
+            onClick  = { ultimoClick = "Ver más ofertas" },
             modifier = Modifier.fillMaxWidth()
-        ) { Text("TextButton") }
+        ) { Text("Ver más ofertas") }
 
         ElevatedButton(
-            onClick  = { ultimoClick = "ElevatedButton" },
+            onClick  = { ultimoClick = "Comparar modelos" },
             modifier = Modifier.fillMaxWidth()
-        ) { Text("ElevatedButton") }
+        ) { Text("Comparar modelos") }
 
         FilledTonalButton(
-            onClick  = { ultimoClick = "FilledTonalButton" },
+            onClick  = { ultimoClick = "Favoritos" },
             modifier = Modifier.fillMaxWidth()
-        ) { Text("FilledTonalButton") }
+        ) { Text("Agregar a favoritos") }
 
-        // enabled = false → el botón no dispara onClick, apariencia atenuada
         Button(
             onClick  = { },
             enabled  = false,
             modifier = Modifier.fillMaxWidth()
-        ) { Text("Deshabilitado (enabled = false)") }
+        ) { Text("Agotado (sin stock)") }
 
         HorizontalDivider()
 
         // IconButton — solo ícono, sin texto
         EtiquetaSeccion("IconButton")
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            IconButton(onClick = { ultimoClick = "IconButton Add" }) {
-                Icon(Icons.Default.Add, contentDescription = "Agregar")
-            }
-            IconButton(onClick = { ultimoClick = "IconButton Delete" }) {
-                Icon(Icons.Default.Delete, contentDescription = "Eliminar",
+            IconButton(onClick = { ultimoClick = "Favorito" }) {
+                Icon(Icons.Default.Favorite, contentDescription = "Favorito",
                     tint = MaterialTheme.colorScheme.error)
+            }
+            IconButton(onClick = { ultimoClick = "Carrito" }) {
+                Icon(Icons.Default.ShoppingCart, contentDescription = "Carrito",
+                    tint = MaterialTheme.colorScheme.primary)
             }
         }
     }

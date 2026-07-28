@@ -26,9 +26,9 @@ fun S01_SaludoScreen() {
         HorizontalDivider()
 
         // El mismo composable, distintos argumentos
-        Saludo("Ana")
-        Saludo("Luis")
-        Saludo("Kotlin")
+        Saludo("Samsung Galaxy")
+        Saludo("iPhone 16")
+        Saludo("Xiaomi 14")
 
         HorizontalDivider()
 

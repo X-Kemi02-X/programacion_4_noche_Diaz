@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../models/servidor_ssh.dart';
+import '../models/telefono.dart';
 
 class PantallaTelefonosFiltro extends StatelessWidget {
   final bool soloDisponibles;
@@ -23,7 +23,7 @@ class PantallaTelefonosFiltro extends StatelessWidget {
             title:   Text(t.modelo),
             subtitle: Text('${t.marca} - \$${t.precio.toStringAsFixed(2)}'),
             onTap: () => context.push(
-              '/servidores/${t.id}',
+              '/telefonos/${t.id}',
               extra: t,
             ),
           );

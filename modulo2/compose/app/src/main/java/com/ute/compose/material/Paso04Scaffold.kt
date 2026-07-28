@@ -19,47 +19,42 @@ import com.ute.compose.model.contactosDeMuestra
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Paso04_ScaffoldScreen() {
-    var contactos  by remember { mutableStateOf(contactosDeMuestra) }
+    var productos by remember { mutableStateOf(contactosDeMuestra) }
     var busqueda   by remember { mutableStateOf("") }
     var filtro     by remember { mutableStateOf("Todos") }
-    var mostrarFab by remember { mutableStateOf(false) } // feedback del FAB
+    var mostrarFab by remember { mutableStateOf(false) }
 
-    val contactosFiltrados = contactos
-        .filter { c -> if (filtro == "Favoritos") c.favorito else true }
+    val productosFiltrados = productos
+        .filter { c -> if (filtro == "Destacados") c.favorito else true }
         .filter { c ->
             busqueda.isBlank() ||
                     c.nombre.contains(busqueda, ignoreCase = true)
         }
 
     Scaffold(
-        // ── TopAppBar ──────────────────────────────────────────────────────
         topBar = {
             TopAppBar(
                 title = {
-                    // El título muestra el conteo — estado elevado al Scaffold
                     Text(
-                        "Contactos (${contactos.size})",
+                        "Catálogo (${productos.size})",
                         fontWeight = FontWeight.Bold
                     )
                 },
-                // actions: iconos a la derecha del título
                 actions = {
-                    // Ícono de favoritos como acceso rápido
                     IconButton(onClick = {
-                        filtro = if (filtro == "Favoritos") "Todos" else "Favoritos"
+                        filtro = if (filtro == "Destacados") "Todos" else "Destacados"
                     }) {
                         Icon(
-                            imageVector        = if (filtro == "Favoritos")
+                            imageVector        = if (filtro == "Destacados")
                                 Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = "Filtrar favoritos",
-                            tint               = if (filtro == "Favoritos")
+                            contentDescription = "Filtrar destacados",
+                            tint               = if (filtro == "Destacados")
                                 MaterialTheme.colorScheme.error
                             else
                                 MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
-                // colors: personaliza los colores de la barra
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -67,29 +62,24 @@ fun Paso04_ScaffoldScreen() {
             )
         },
 
-        // ── FloatingActionButton ───────────────────────────────────────────
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { mostrarFab = true }
             ) {
-                Icon(Icons.Default.PersonAdd, contentDescription = "Nuevo contacto")
+                Icon(Icons.Default.ShoppingCart, contentDescription = "Carrito")
             }
         }
 
-        // ── Content ────────────────────────────────────────────────────────────
-        // paddingValues contiene el espacio que ocupa topBar y bottomBar
-        // SIEMPRE aplícalo al contenido — de lo contrario queda bajo la TopAppBar
     ) { paddingValues ->
         Column(
             modifier = Modifier
-                .padding(paddingValues)  // ← CRÍTICO: aplica el padding del Scaffold
+                .padding(paddingValues)
                 .fillMaxSize()
         ) {
-            // Búsqueda
             OutlinedTextField(
                 value         = busqueda,
                 onValueChange = { busqueda = it },
-                placeholder   = { Text("Buscar contacto...") },
+                placeholder   = { Text("Buscar teléfono...") },
                 leadingIcon   = { Icon(Icons.Default.Search, null) },
                 trailingIcon  = {
                     if (busqueda.isNotEmpty())
@@ -103,12 +93,11 @@ fun Paso04_ScaffoldScreen() {
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             )
 
-            // Chips de filtro
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding        = PaddingValues(horizontal = 16.dp)
             ) {
-                items(listOf("Todos", "Favoritos")) { opcion ->
+                items(listOf("Todos", "Destacados")) { opcion ->
                     FilterChip(
                         selected = filtro == opcion,
                         onClick  = { filtro = opcion },
@@ -123,38 +112,37 @@ fun Paso04_ScaffoldScreen() {
 
             Spacer(Modifier.height(4.dp))
 
-            // Lista
             LazyColumn(
                 contentPadding      = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 item {
-                    Text("${contactosFiltrados.size} resultado(s)",
+                    Text("${productosFiltrados.size} resultado(s)",
                         style    = MaterialTheme.typography.labelSmall,
                         color    = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(bottom = 4.dp))
                 }
-                items(contactosFiltrados, key = { it.id }) { contacto ->
+                items(productosFiltrados, key = { it.id }) { producto ->
                     TarjetaContacto(
-                        contacto  = contacto,
+                        contacto  = producto,
                         onFavorito = {
-                            contactos = contactos.map { c ->
-                                if (c.id == contacto.id) c.copy(favorito = !c.favorito) else c
+                            productos = productos.map { c ->
+                                if (c.id == producto.id) c.copy(favorito = !c.favorito) else c
                             }
-                        }
+                        },
+                        onVerDetalle = { }
                     )
                 }
-                item { Spacer(Modifier.height(80.dp)) } // espacio para FAB
+                item { Spacer(Modifier.height(80.dp)) }
             }
         }
     }
 
-    // Feedback temporal del FAB — en el Paso 6 se reemplaza por un diálogo real
     if (mostrarFab) {
         AlertDialog(
             onDismissRequest = { mostrarFab = false },
-            title   = { Text("Nuevo contacto") },
-            text    = { Text("Esta función se conectará con el formulario del Paso 1 en el Paso 6.") },
+            title   = { Text("Carrito de compras") },
+            text    = { Text("Función de carrito disponible próximamente.") },
             confirmButton = {
                 TextButton(onClick = { mostrarFab = false }) { Text("OK") }
             }
